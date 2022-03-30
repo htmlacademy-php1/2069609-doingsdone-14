@@ -42,37 +42,37 @@ $show_complete_tasks = rand(0, 1);
                 <?php $projects=['Входящие', 'Учеба', 'Работа', 'Домашние дела', 'Авто'];
                 $tasks= [
                     [
-                        'task'=>'Собеседование в IT компании',
+                        'name'=>'Собеседование в IT компании',
                         'dat'=>'01.12.2019',
                         'category'=>'Работа',
                         'status'=>false
                     ],
                     [
-                        'task'=>'Выполнить тестовое задание',
+                        'name'=>'Выполнить тестовое задание',
                         'dat'=>'25.12.2019',
                         'category'=>'Работа',
                         'status'=>false
                     ],
                     [
-                        'task'=>'Сделать задание первого раздела',
+                        'name'=>'Сделать задание первого раздела',
                         'dat'=>'21.12.2019',
                         'category'=>'Учеба',
                         'status'=>true
                     ],
                     [
-                        'task'=>'Встреча с другом',
+                        'name'=>'Встреча с другом',
                         'dat'=>'22.12.2019',
                         'category'=>'Входящие',
                         'status'=>false
                     ],
                     [
-                        'task'=>'Купить корм для кота',
+                        'name'=>'Купить корм для кота',
                         'dat'=>'null',
                         'category'=>'Домашние дела',
                         'status'=>false
                     ],
                     [
-                        'task'=>'Заказать пиццу',
+                        'name'=>'Заказать пиццу',
                         'dat'=>'null',
                         'category'=>'Домашние дела',
                         'status'=>false
@@ -119,11 +119,12 @@ $show_complete_tasks = rand(0, 1);
                 </div>
 
                 <table class="tasks">
-                    <tr class="tasks__item task">
+                    <?php foreach ($tasks as $task): ?>
+                        <tr class="tasks__item task">
                         <td class="task__select">
                             <label class="checkbox task__checkbox">
                                 <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
-                                <span class="checkbox__text">Сделать главную страницу Дела в порядке</span>
+                                <span class="checkbox__text"><?=$task['name']; ?></span>
                             </label>
                         </td>
 
@@ -133,8 +134,9 @@ $show_complete_tasks = rand(0, 1);
 
                         <td class="task__date"></td>
                     </tr>
+                    <?php endforeach; ?>
                     <!--показывать следующий тег <tr/>, если переменная $show_complete_tasks равна единице-->
-                    <?php if ($show_complete_tasks===1): ?>
+                    <!--<?php if ($show_complete_tasks===1): ?>
                     <tr class="tasks__item task task--completed">
                         <td class="task__select">
                             <label class="checkbox task__checkbox">
@@ -147,7 +149,7 @@ $show_complete_tasks = rand(0, 1);
                         <td class="task__controls">
                         </td>
                     </tr>
-                    <?php endif; ?>
+                    <?php endif; ?> -->
                 </table>
             </main>
         </div>
