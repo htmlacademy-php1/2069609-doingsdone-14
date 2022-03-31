@@ -1,6 +1,45 @@
 <?php
 // показывать или нет выполненные задачи
 $show_complete_tasks = rand(0, 1);
+$projects = ['Входящие', 'Учеба', 'Работа', 'Домашние дела', 'Авто'];
+$tasks = [
+    [
+        'name' => 'Собеседование в IT компании',
+        'data' => '01.12.2019',
+        'category' => 'Работа',
+        'status' => false
+    ],
+    [
+        'name' => 'Выполнить тестовое задание',
+        'data' => '25.12.2019',
+        'category' => 'Работа',
+        'status' => false
+    ],
+    [
+        'name' => 'Сделать задание первого раздела',
+        'data' => '21.12.2019',
+        'category' => 'Учеба',
+        'status' => true
+    ],
+    [
+        'name' => 'Встреча с другом',
+        'data' => '22.12.2019',
+        'category' => 'Входящие',
+        'status' => false
+    ],
+    [
+        'name' => 'Купить корм для кота',
+        'data' => null,
+        'category' => 'Домашние дела',
+        'status' => false
+    ],
+    [
+        'name' => 'Заказать пиццу',
+        'data' => null,
+        'category' => 'Домашние дела',
+        'status' => false
+    ]
+];
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -39,45 +78,6 @@ $show_complete_tasks = rand(0, 1);
         <div class="content">
             <section class="content__side">
                 <h2 class="content__side-heading">Проекты</h2>
-                <?php $projects=['Входящие', 'Учеба', 'Работа', 'Домашние дела', 'Авто'];
-                $tasks= [
-                    [
-                        'name'=>'Собеседование в IT компании',
-                        'data'=>'01.12.2019',
-                        'category'=>'Работа',
-                        'status'=>false
-                    ],
-                    [
-                        'name'=>'Выполнить тестовое задание',
-                        'data'=>'25.12.2019',
-                        'category'=>'Работа',
-                        'status'=>false
-                    ],
-                    [
-                        'name'=>'Сделать задание первого раздела',
-                        'data'=>'21.12.2019',
-                        'category'=>'Учеба',
-                        'status'=>true
-                    ],
-                    [
-                        'name'=>'Встреча с другом',
-                        'data'=>'22.12.2019',
-                        'category'=>'Входящие',
-                        'status'=>false
-                    ],
-                    [
-                        'name'=>'Купить корм для кота',
-                        'data'=>'null',
-                        'category'=>'Домашние дела',
-                        'status'=>false
-                    ],
-                    [
-                        'name'=>'Заказать пиццу',
-                        'data'=>'null',
-                        'category'=>'Домашние дела',
-                        'status'=>false
-                    ]
-                ]; ?>
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
                     <!-- Добавляем название задач в таблицу-->
