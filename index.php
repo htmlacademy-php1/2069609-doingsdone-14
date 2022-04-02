@@ -42,14 +42,15 @@ $tasks = [
 ];
  // Создаем функцию подсчета проектов number_of_pr, в зависимости от категории задачи
 
-function number_of_pr($arrayoftask, $nameoftask) {
-    $SummaPr = 0;
-    foreach ($arrayoftask as $task){
-        if ($task['category']===$nameoftask){
-            $SummaPr=$SummaPr+1;};
+function count_of_tasks($array_of_task, $name_of_category) {
+    $count_of_project = 0;
+    foreach ($array_of_task as $task){
+        if ($task['category']===$name_of_category){
+            $count_of_project++;
+        }
     };
-    return $SummaPr;
-};
+    return $count_of_project;
+}
 
 ?>
 <!DOCTYPE html>
@@ -96,7 +97,7 @@ function number_of_pr($arrayoftask, $nameoftask) {
                         <li class="main-navigation__list-item">
                             <a class="main-navigation__list-item-link" href="#"><?=$project ?></a>
                             <!-- Выводим количество с помощью функции-->
-                            <span class="main-navigation__list-item-count"><?=number_of_pr($tasks, $project) ?></span>
+                            <span class="main-navigation__list-item-count"><?=count_of_tasks($tasks, $project) ?></span>
                         </li>
                         <?php endforeach; ?>
                     </ul>
