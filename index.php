@@ -5,37 +5,37 @@ $projects = ['Входящие', 'Учеба', 'Работа', 'Домашние
 $tasks = [
     [
         'name' => 'Собеседование в IT компании',
-        'data' => '01.12.2019',
+        'date' => '01.12.2019',
         'category' => 'Работа',
         'status' => false
     ],
     [
         'name' => 'Выполнить тестовое задание',
-        'data' => '25.12.2019',
+        'date' => '25.12.2019',
         'category' => 'Работа',
         'status' => false
     ],
     [
         'name' => 'Сделать задание первого раздела',
-        'data' => '21.12.2019',
+        'date' => '21.12.2019',
         'category' => 'Учеба',
         'status' => true
     ],
     [
         'name' => 'Встреча с другом',
-        'data' => '22.12.2019',
+        'date' => '22.12.2019',
         'category' => 'Входящие',
         'status' => false
     ],
     [
         'name' => 'Купить корм для кота',
-        'data' => null,
+        'date' => null,
         'category' => 'Домашние дела',
         'status' => false
     ],
     [
         'name' => 'Заказать пиццу',
-        'data' => null,
+        'date' => null,
         'category' => 'Домашние дела',
         'status' => false
     ]
@@ -149,7 +149,7 @@ $tasks = [
                             <span><?=$task['category']; ?></span>
                         </td>
                     <!-- Вывод даты в таблицу -->
-                        <td class="task__date"><?=$task['data']; ?>
+                        <td class="task__date"><?=$task['date']; ?>
                         </td>
                     </tr>
                     <?php endforeach; ?>
