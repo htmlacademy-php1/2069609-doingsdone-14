@@ -48,10 +48,16 @@
                 <?php continue; ?>
             <?php endif; ?> -->
             <tr class="tasks__item task">
+
             <!--Если задача выполнена, добавляем строчке класс task--completed-->
             <?php if ($task['status']===true): ?>
                 <tr class="tasks__item task<?=' task--completed' ?>">
             <?php endif; ?>
+
+            <?php if ((strtotime($task['date']))-time() < 86400): ?>
+            <tr class="tasks__item task<?=' task--important' ?>">
+                <?php endif; ?>
+
 
             <td class="task__select">
                 <label class="checkbox task__checkbox">
