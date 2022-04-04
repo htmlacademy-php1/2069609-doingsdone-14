@@ -54,6 +54,11 @@
                 <tr class="tasks__item task<?=' task--completed' ?>">
             <?php endif; ?>
 
+            <!--Если до выполенений задачи осталось менее 24 часов, строке добавляем класс task--important -->
+            <?php if ((strtotime($task['date']))-time() < 86400): ?>
+                <tr class="tasks__item task<?=' task--important' ?>">
+            <?php endif; ?>
+
             <td class="task__select">
                 <label class="checkbox task__checkbox">
                     <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
