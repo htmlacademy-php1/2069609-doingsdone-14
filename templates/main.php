@@ -34,8 +34,8 @@
         </nav>
 
         <label class="checkbox">
-            <!--добавить сюда атрибут "checked", если переменная $show_complete_tasks равна единице
-            <input class="checkbox__input visually-hidden show_completed" type="checkbox"<?php if ($show_complete_tasks===1): ?> checked<?php endif; ?>> -->
+            <!--добавить сюда атрибут "checked", если переменная $show_complete_tasks равна единице-->
+            <input class="checkbox__input visually-hidden show_completed" type="checkbox"<?php if ($show_complete_tasks===1): ?> checked<?php endif; ?>>
             <span class="checkbox__text">Показывать выполненные</span>
         </label>
     </div>
@@ -43,21 +43,16 @@
     <table class="tasks">
         <!--Добавляем каждой задаче новую строчку с названием, категорией и датой-->
         <?php foreach ($tasks as $task): ?>
-            <!-- если задача выполнена и $show_complete_tasks=0, пропускаем итерацию и не выводим задачу
+            <!-- если задача выполнена и $show_complete_tasks=0, пропускаем итерацию и не выводим задачу-->
             <?php if ($task['status']===true and $show_complete_tasks===0): ?>
                 <?php continue; ?>
-            <?php endif; ?> -->
+            <?php endif; ?>
             <tr class="tasks__item task">
 
             <!--Если задача выполнена, добавляем строчке класс task--completed-->
             <?php if ($task['status']===true): ?>
                 <tr class="tasks__item task<?=' task--completed' ?>">
             <?php endif; ?>
-
-            <?php if ((strtotime($task['date']))-time() < 86400): ?>
-            <tr class="tasks__item task<?=' task--important' ?>">
-                <?php endif; ?>
-
 
             <td class="task__select">
                 <label class="checkbox task__checkbox">
@@ -79,7 +74,7 @@
 
             </tr>
         <?php endforeach; ?>
-        <!--показывать следующий тег <tr/>, если переменная $show_complete_tasks равна единице
+        <!--показывать следующий тег <tr/>, если переменная $show_complete_tasks равна единице-->
         <?php if ($show_complete_tasks===1): ?>
                     <tr class="tasks__item task task--completed">
                         <td class="task__select">
@@ -93,6 +88,6 @@
                         <td class="task__controls">
                         </td>
                     </tr>
-                    <?php endif; ?>-->
+                    <?php endif; ?>
     </table>
 </main>

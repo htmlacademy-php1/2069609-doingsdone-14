@@ -11,15 +11,14 @@ function count_of_tasks($array_of_task, $name_of_category) {
     return $count_of_project;
 }
 
-require_once ('functions.php');
-$show_complete_tasks = rand(0, 1);
+require_once ('helpers.php');
 $projects = ['Входящие','Учеба', 'Работа', 'Домашние дела', 'Авто'];
 $tasks = [
     [
         'name' => 'Собеседование в IT компании',
-        'date' => '01.12.2022',
+        'date' => '03.04.2022',
         'category' => 'Работа',
-        'status' => false
+        'status' => true
     ],
     [
         'name' => 'Выполнить тестовое задание',
@@ -47,15 +46,18 @@ $tasks = [
     ],
     [
         'name' => 'Заказать пиццу',
-        'date' => '04.04.2022',
+        'date' => '05.04.2022',
         'category' => 'Домашние дела',
         'status' => false
     ]
 ];
+$show_complete_tasks = rand(0, 1);
 
 $page_content = include_template('main.php',[
     'tasks'=>$tasks,
-    'projects'=>$projects]);
+    'projects'=>$projects,
+    'show_complete_tasks'=>$show_complete_tasks
+]);
 
 $layout_content = include_template('layout.php',[
     'title'=>'Дела в порядке',
