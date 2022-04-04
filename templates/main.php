@@ -83,6 +83,8 @@
                                 <span class="checkbox__text">Записаться на интенсив "Базовый PHP"</span>
                             </label>
                         </td>
+
+                        <td>Учеба</td>
                         <td class="task__date">10.10.2019</td>
 
                         <td class="task__controls">

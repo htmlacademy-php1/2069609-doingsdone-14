@@ -46,7 +46,7 @@ $tasks = [
     ],
     [
         'name' => 'Заказать пиццу',
-        'date' => '05.04.2022',
+        'date' => null,
         'category' => 'Домашние дела',
         'status' => false
     ]
