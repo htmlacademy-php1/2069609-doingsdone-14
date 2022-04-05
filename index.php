@@ -10,17 +10,11 @@ function count_of_tasks($array_of_task, $name_of_category) {
     }
     return $count_of_project;
 }
-define ('seconds_in_day' , 86400);
-function hot_task($task): bool
+define ('SECONDS_IN_DAY' , 86400);
+function is_task_important($task_date): bool
 {
         $current_time = time();
-        if (strtotime($task)-$current_time < seconds_in_day){
-            $result = true;
-        }
-        else {
-            $result = false;
-        }
-    return $result;
+        return (strtotime($task_date)-$current_time < SECONDS_IN_DAY);
 }
 
 require_once ('helpers.php');
