@@ -10,19 +10,25 @@ function count_of_tasks($array_of_task, $name_of_category) {
     }
     return $count_of_project;
 }
+define ('SECONDS_IN_DAY' , 86400);
+function is_task_important($task_date): bool
+{
+        $current_time = time();
+        return (strtotime($task_date)-$current_time < SECONDS_IN_DAY);
+}
 
 require_once ('helpers.php');
 $projects = ['Входящие','Учеба', 'Работа', 'Домашние дела', 'Авто'];
 $tasks = [
     [
         'name' => 'Собеседование в IT компании',
-        'date' => '03.04.2022',
+        'date' => '06.04.2022',
         'category' => 'Работа',
         'status' => true
     ],
     [
         'name' => 'Выполнить тестовое задание',
-        'date' => '03.04.2022',
+        'date' => '05.04.2022',
         'category' => 'Работа',
         'status' => false
     ],
@@ -40,13 +46,13 @@ $tasks = [
     ],
     [
         'name' => 'Купить корм для кота',
-        'date' => '05.04.2022',
+        'date' => '05.05.2022',
         'category' => 'Домашние дела',
         'status' => false
     ],
     [
         'name' => 'Заказать пиццу',
-        'date' => null,
+        'date' => '04.09.2022',
         'category' => 'Домашние дела',
         'status' => false
     ]

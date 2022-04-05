@@ -54,6 +54,11 @@
                 <tr class="tasks__item task<?=' task--completed' ?>">
             <?php endif; ?>
 
+            <!--Если до выполенений задачи осталось менее 24 часов, строке добавляем класс task--important -->
+            <?php if (is_task_important($task['date'])): ?>
+                <tr class="tasks__item task<?=' task--important' ?>">
+            <?php endif; ?>
+
             <td class="task__select">
                 <label class="checkbox task__checkbox">
                     <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
@@ -69,7 +74,7 @@
                 <span><?=htmlspecialchars($task['category']); ?></span>
             </td>
             <!-- Вывод даты в таблицу -->
-            <td class="task__date"><?=$task['date']; ?>
+            <td class="task__date"><?=htmlspecialchars($task['date']); ?>
             </td>
 
             </tr>
