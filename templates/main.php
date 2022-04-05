@@ -55,7 +55,7 @@
             <?php endif; ?>
 
             <!--Если до выполенений задачи осталось менее 24 часов, строке добавляем класс task--important -->
-            <?php if ((strtotime($task['date']))-time() < 86400): ?>
+            <?php if (hot_task($task['date'])===true): ?>
                 <tr class="tasks__item task<?=' task--important' ?>">
             <?php endif; ?>
 
