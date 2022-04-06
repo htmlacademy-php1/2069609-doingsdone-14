@@ -19,7 +19,7 @@ CREATE UNIQUE INDEX index_project_user ON projects (name, user_id);
 CREATE TABLE tasks (
   id INT AUTO_INCREMENT PRIMARY KEY,
   date_of_create TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  status BIT DEFAULT 0,
+  status INTEGER DEFAULT 0,
   name VARCHAR(255) NOT NULL,
   link_to_file VARCHAR(255),
   due_date DATE NOT NULL,
