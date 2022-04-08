@@ -15,7 +15,7 @@ INSERT INTO tasks (status, due_date, user_id, project_id, name) VALUES ('0', '20
 INSERT INTO tasks (status, due_date, user_id, project_id, name) VALUES ('0', '2022-03-06', '1', '3', 'Купить корм для кота');
 INSERT INTO tasks (status, due_date, user_id, project_id, name) VALUES ('0', '2022-07-26', '1', '3', 'Заказать пиццу');
 INSERT INTO tasks (status, due_date, user_id, project_id, name) VALUES ('0', '2022-06-01', '3', '4', 'Помыть машину');
-
+INSERT INTO tasks (status, due_date, user_id, project_id, name) VALUES ('0', '2022-04-09', '3', '2', 'Отправить ТЗ Мишане');
 
 -- обновить название задачи по её идентификатору.
 UPDATE tasks SET name = 'Заказать пиццу и колу' WHERE id = 6;
