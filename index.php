@@ -20,7 +20,7 @@ function is_task_important($task_date): bool
 
 require_once ('helpers.php');
 $show_complete_tasks = rand(0, 1);
-
+$current_user_id = 3;
 require_once 'init.php';
 
 if (!$link) {
@@ -28,8 +28,11 @@ if (!$link) {
     $content = include_template('error.php', ['error' => $error]);
 }
 else {
-    $sql1 = 'SELECT * FROM projects WHERE user_id = 3';
-    $result = mysqli_query($link, $sql1);
+    $sql = 'SELECT * FROM projects WHERE user_id = ?';
+    $stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($stmt, 'i', $current_user_id);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
         if ($result) {
             $projects = mysqli_fetch_all($result, MYSQLI_ASSOC);
         }
@@ -38,8 +41,11 @@ else {
             $content = include_template('error.php', ['error' => $error]);
         }
 
-    $sql2 = 'SELECT t.name as task_name, p.name as project_name, t.due_date as task_date, t.status as task_status FROM tasks t JOIN projects p ON t.project_id = p.id WHERE t.user_id = 3';
-    $result = mysqli_query($link, $sql2);
+    $sql = 'SELECT t.name as task_name, p.name as project_name, t.due_date as task_date, t.status as task_status FROM tasks t JOIN projects p ON t.project_id = p.id WHERE t.user_id = ?';
+    $stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($stmt, 'i', $current_user_id);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
     if ($result) {
         $tasks = mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
@@ -48,19 +54,6 @@ else {
         $content = include_template('error.php', ['error' => $error]);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 $page_content = include_template('main.php',[
     'tasks'=>$tasks,
