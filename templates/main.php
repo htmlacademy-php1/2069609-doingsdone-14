@@ -65,10 +65,10 @@
                     <span class="checkbox__text"><?=htmlspecialchars($task['task_name']); ?></span>
                 </label>
             </td>
-            <!-- Вывод подгружаемого файла в таблицу
+            <!-- Вывод подгружаемого файла в таблицу -->
             <td class="task__file">
                 <a class="download-link" href="#">Home.psd</a>
-            </td> -->
+            </td>
             <!-- Вывод категории в таблицу -->
             <td>
                 <span><?=htmlspecialchars($task['project_name']); ?></span>
@@ -88,12 +88,10 @@
                                 <span class="checkbox__text">Записаться на интенсив "Базовый PHP"</span>
                             </label>
                         </td>
-
-                        <td>Учеба</td>
-                        <td class="task__date">10.10.2019</td>
-
                         <td class="task__controls">
                         </td>
+                        <td class="task__date">Учеба</td>
+                        <td class="task__date">2019-04-09</td>
                     </tr>
                     <?php endif; ?>
     </table>
