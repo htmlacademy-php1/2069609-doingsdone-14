@@ -5,9 +5,9 @@
             <!-- Добавляем название задач в таблицу-->
             <?php foreach ($projects as $project): ?>
                 <li class="main-navigation__list-item">
-                    <a class="main-navigation__list-item-link" href="#"><?=htmlspecialchars($project) ?></a>
+                    <a class="main-navigation__list-item-link" href="#"><?=htmlspecialchars($project['name']) ?></a>
                     <!-- Выводим количество с помощью функции-->
-                    <span class="main-navigation__list-item-count"><?=htmlspecialchars(count_of_tasks($tasks, $project)) ?></span>
+                    <span class="main-navigation__list-item-count"><?=count_of_projects($tasks, $project['name']) ?></span>
                 </li>
             <?php endforeach; ?>
         </ul>
@@ -44,37 +44,37 @@
         <!--Добавляем каждой задаче новую строчку с названием, категорией и датой-->
         <?php foreach ($tasks as $task): ?>
             <!-- если задача выполнена и $show_complete_tasks=0, пропускаем итерацию и не выводим задачу-->
-            <?php if ($task['status']===true and $show_complete_tasks===0): ?>
+            <?php if ($task['task_status']===true and $show_complete_tasks===0): ?>
                 <?php continue; ?>
             <?php endif; ?>
             <tr class="tasks__item task">
 
             <!--Если задача выполнена, добавляем строчке класс task--completed-->
-            <?php if ($task['status']===true): ?>
+            <?php if ($task['task_status']===true): ?>
                 <tr class="tasks__item task<?=' task--completed' ?>">
             <?php endif; ?>
 
             <!--Если до выполенений задачи осталось менее 24 часов, строке добавляем класс task--important -->
-            <?php if (is_task_important($task['date'])): ?>
+            <?php if (is_task_important($task['task_date'])): ?>
                 <tr class="tasks__item task<?=' task--important' ?>">
             <?php endif; ?>
 
             <td class="task__select">
                 <label class="checkbox task__checkbox">
                     <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
-                    <span class="checkbox__text"><?=htmlspecialchars($task['name']); ?></span>
+                    <span class="checkbox__text"><?=htmlspecialchars($task['task_name']); ?></span>
                 </label>
             </td>
-            <!-- Вывод подгружаемого файла в таблицу
+            <!-- Вывод подгружаемого файла в таблицу -->
             <td class="task__file">
                 <a class="download-link" href="#">Home.psd</a>
-            </td> -->
+            </td>
             <!-- Вывод категории в таблицу -->
             <td>
-                <span><?=htmlspecialchars($task['category']); ?></span>
+                <span><?=htmlspecialchars($task['project_name']); ?></span>
             </td>
             <!-- Вывод даты в таблицу -->
-            <td class="task__date"><?=htmlspecialchars($task['date']); ?>
+            <td class="task__date"><?=htmlspecialchars($task['task_date']); ?>
             </td>
 
             </tr>
@@ -88,12 +88,10 @@
                                 <span class="checkbox__text">Записаться на интенсив "Базовый PHP"</span>
                             </label>
                         </td>
-
-                        <td>Учеба</td>
-                        <td class="task__date">10.10.2019</td>
-
                         <td class="task__controls">
                         </td>
+                        <td class="task__date">Учеба</td>
+                        <td class="task__date">2019-04-09</td>
                     </tr>
                     <?php endif; ?>
     </table>
