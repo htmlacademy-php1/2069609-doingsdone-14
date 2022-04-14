@@ -5,9 +5,13 @@
             <!-- Добавляем название задач в таблицу-->
             <?php foreach ($projects as $project): ?>
                 <li class="main-navigation__list-item">
-                    <a class="main-navigation__list-item-link" href="#"><?=htmlspecialchars($project['name']) ?></a>
+                    <!-- Выделяем текущий проект с помощью доп. класса main-navigation__list-item--active -->
+                    <a class="main-navigation__list-item-link
+                    <?php if ($project['id']==$current_category_id): ?>
+                    <?= ' main-navigation__list-item--active'; ?>
+                    <?php endif; ?>" href="/index.php?cat_id=<?=$project['id'] ?>"><?=htmlspecialchars($project['name']) ?></a>
                     <!-- Выводим количество с помощью функции-->
-                    <span class="main-navigation__list-item-count"><?=count_of_projects($tasks, $project['name']) ?></span>
+                    <span class="main-navigation__list-item-count"><?=count_of_projects($all_tasks, $project['name']) ?></span>
                 </li>
             <?php endforeach; ?>
         </ul>
