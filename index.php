@@ -17,11 +17,11 @@ function is_task_important($task_date): bool
         $current_time = time();
         return (strtotime($task_date)-$current_time < SECONDS_IN_DAY);
 }
-
 require_once ('helpers.php');
 $show_complete_tasks = rand(0, 1);
 $current_user_id = 3;
-$current_project_id = filter_input(INPUT_GET, 'cat_id');
+$current_project_id = filter_input(INPUT_GET, 'pr_id');
+$current_pr_id = (int) $current_project_id;
 
 require_once 'init.php';
 
@@ -42,31 +42,38 @@ else {
         $content = include_template('error.php', ['error' => $error]);
     }
     $sql = 'SELECT t.name as task_name, p.name as project_name, p.id as project_id,' .
-            ' t.due_date as task_date, t.status as task_status'
-            . ' FROM tasks t JOIN projects p ON t.project_id = p.id WHERE t.user_id = ?';
+        ' t.due_date as task_date, t.status as task_status'
+        . ' FROM tasks t JOIN projects p ON t.project_id = p.id WHERE t.user_id = ?';
     $stmt = db_get_prepare_stmt($link, $sql, [$current_user_id]);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     if ($result) {
         $tasks = mysqli_fetch_all($result, MYSQLI_ASSOC);
-        $content = include_template('main.php', [
+        if (empty($_GET['pr_id'])) {
+            $content = include_template('main.php', [
                 'tasks' => $tasks,
                 'projects' => $projects,
                 'show_complete_tasks' => $show_complete_tasks,
-                'current_project_id' => $current_project_id
+                'current_pr_id' => $current_pr_id
             ]);
+        } else {
+            if (count_of_tasks($tasks, $current_pr_id) === 0) {
+                http_response_code(404);
+                $content = include_template('error.php', ['error' => 'Задачи не найдены']);
+            } else {
+                $content = include_template('main.php', [
+                    'tasks' => $tasks,
+                    'projects' => $projects,
+                    'show_complete_tasks' => $show_complete_tasks,
+                    'current_pr_id' => $current_pr_id
+                ]);
+            }
+        }
     } else {
         $error = mysqli_error($link);
         $content = include_template('error.php', ['error' => $error]);
     }
 }
-
-// ТУТ ДОЛЖНА БЫТЬ ПРОВЕРКА НА НАЛИЧИЕ ЗАДАЧ С НЕСУЩЕСТВУЮЩИМ ПРОЕКТОМ.
-if (count_of_tasks($tasks, $current_project_id)===0){
-    $error = http_response_code(404);
-    $content = include_template('error.php', ['error' => $error]);
-}
-
 $layout_content = include_template('layout.php',['content' => $content, 'title'=> 'Дела в порядке']);
 print($layout_content);
 

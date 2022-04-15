@@ -7,9 +7,10 @@
                 <li class="main-navigation__list-item">
                     <!-- Выделяем текущий проект с помощью доп. класса main-navigation__list-item--active -->
                     <a class="main-navigation__list-item-link
-                        <?php if ($project['id']==$current_project_id): ?>
-                            <?= ' main-navigation__list-item--active'; ?>
-                        <?php endif; ?>" href="/index.php?cat_id=<?=$project['id'] ?>"><?=htmlspecialchars($project['name']) ?></a>
+                        <?php if ($project['id']===$current_pr_id):
+                        echo ' main-navigation__list-item--active';
+                        endif; ?>"
+                       href="/index.php?pr_id=<?=$project['id'] ?>"><?=htmlspecialchars($project['name']) ?></a>
                     <!-- Выводим количество с помощью функции-->
                     <span class="main-navigation__list-item-count"><?=count_of_tasks($tasks, $project['id']) ?></span>
                 </li>
@@ -47,9 +48,9 @@
     <table class="tasks">
         <!--Добавляем каждой задаче новую строчку с названием, категорией и датой-->
         <?php foreach ($tasks as $task): ?>
-            <!--Проверяем, задан ли странице параметр запроса cat_id-->
-            <?php if ($current_project_id): ?>
-                <?php if ($task['project_id']!=$current_project_id): ?>
+            <!--Проверяем, задан ли странице параметр запроса pr_id-->
+            <?php if ($current_pr_id): ?>
+                <?php if ($task['project_id']!==$current_pr_id): ?>
                     <?php continue; ?>
                 <?php endif; ?>
             <?php endif; ?>
@@ -82,24 +83,10 @@
                 <span><?=htmlspecialchars($task['project_name']); ?></span>
             </td>
             <!-- Вывод даты в таблицу -->
-            <td class="task__date"><?=htmlspecialchars($task['task_date']); ?>
+            <td class="task__date">
+                <span><?=htmlspecialchars($task['task_date']); ?></span>
             </td>
             </tr>
         <?php endforeach; ?>
-        <!--показывать следующий тег <tr/>, если переменная $show_complete_tasks равна единице-->
-        <?php if ($show_complete_tasks===1): ?>
-            <tr class="tasks__item task task--completed">
-                <td class="task__select">
-                    <label class="checkbox task__checkbox">
-                        <input class="checkbox__input visually-hidden" type="checkbox" checked>
-                        <span class="checkbox__text">Записаться на интенсив "Базовый PHP"</span>
-                    </label>
-                </td>
-                <td class="task__controls">
-                </td>
-                <td class="task__date">Учеба</td>
-                <td class="task__date">2019-04-09</td>
-            </tr>
-        <?php endif; ?>
     </table>
 </main>
