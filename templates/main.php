@@ -47,17 +47,17 @@
 
     <table class="tasks">
         <!--Добавляем каждой задаче новую строчку с названием, категорией и датой-->
-        <?php foreach ($tasks as $task): ?>
-            <!--Проверяем, задан ли странице параметр запроса pr_id-->
-            <?php if ($current_pr_id): ?>
-                <?php if ($task['project_id']!==$current_pr_id): ?>
-                    <?php continue; ?>
-                <?php endif; ?>
-            <?php endif; ?>
-            <!-- если задача выполнена и $show_complete_tasks=0, пропускаем итерацию и не выводим задачу-->
-            <?php if ($task['task_status']===true and $show_complete_tasks===0): ?>
-                <?php continue; ?>
-            <?php endif; ?>
+        <?php foreach ($tasks as $task):
+            // Проверяем, задан ли странице параметр запроса pr_id
+            if ($current_project_id):
+                if ($task['project_id']!==$current_project_id):
+                    continue;
+                endif;
+            endif;
+            // если задача выполнена и $show_complete_tasks=0, пропускаем итерацию и не выводим задачу
+            if ($task['task_status']===true and $show_complete_tasks===0):
+                continue;
+            endif; ?>
             <tr class="tasks__item task">
             <!--Если задача выполнена, добавляем строчке класс task--completed-->
             <?php if ($task['task_status']===true): ?>
