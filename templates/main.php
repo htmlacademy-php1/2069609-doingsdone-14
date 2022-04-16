@@ -7,10 +7,11 @@
                 <li class="main-navigation__list-item">
                     <!-- Выделяем текущий проект с помощью доп. класса main-navigation__list-item--active -->
                     <a class="main-navigation__list-item-link
-                        <?php if ($project['id']===$current_pr_id):
-                        echo ' main-navigation__list-item--active';
-                        endif; ?>"
-                       href="/index.php?pr_id=<?=$project['id'] ?>"><?=htmlspecialchars($project['name']) ?></a>
+                        <?php if ($project['id']===$current_project_id) {
+                                echo ' main-navigation__list-item--active';
+                               }
+                        ?>"
+                       href="/index.php?project_id=<?=$project['id'] ?>"><?=htmlspecialchars($project['name']) ?></a>
                     <!-- Выводим количество с помощью функции-->
                     <span class="main-navigation__list-item-count"><?=count_of_tasks($tasks, $project['id']) ?></span>
                 </li>
@@ -47,18 +48,18 @@
 
     <table class="tasks">
         <!--Добавляем каждой задаче новую строчку с названием, категорией и датой-->
-        <?php foreach ($tasks as $task):
-            // Проверяем, задан ли странице параметр запроса pr_id
-            if ($current_project_id):
-                if ($task['project_id']!==$current_project_id):
+        <?php foreach ($tasks as $task) {
+            // Проверяем, задан ли странице параметр запроса project_id
+            if ($current_project_id) {
+                if ($task['project_id']!==$current_project_id){
                     continue;
-                endif;
-            endif;
+                }
+            }
             // если задача выполнена и $show_complete_tasks=0, пропускаем итерацию и не выводим задачу
-            if ($task['task_status']===true and $show_complete_tasks===0):
+            if ($task['task_status']===true and $show_complete_tasks===0) {
                 continue;
-            endif; ?>
-            <tr class="tasks__item task">
+            } ?>
+        <tr class="tasks__item task">
             <!--Если задача выполнена, добавляем строчке класс task--completed-->
             <?php if ($task['task_status']===true): ?>
                 <tr class="tasks__item task<?=' task--completed' ?>">
@@ -87,6 +88,6 @@
                 <span><?=htmlspecialchars($task['task_date']); ?></span>
             </td>
             </tr>
-        <?php endforeach; ?>
+        <?php } //endforeach; ?>
     </table>
 </main>

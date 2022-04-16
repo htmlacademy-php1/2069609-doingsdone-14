@@ -19,8 +19,8 @@ function is_task_important($task_date): bool
 }
 require_once ('helpers.php');
 $show_complete_tasks = rand(0, 1);
-$current_user_id = 2;
-$current_project_id = (int) filter_input(INPUT_GET, 'pr_id', FILTER_SANITIZE_NUMBER_INT);
+$current_user_id = 3;
+$current_project_id = (int) filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_NUMBER_INT);
 
 require_once 'init.php';
 
@@ -48,7 +48,7 @@ else {
     $result = mysqli_stmt_get_result($stmt);
     if ($result) {
         $tasks = mysqli_fetch_all($result, MYSQLI_ASSOC);
-        if (empty($_GET['pr_id'])) {
+        if ($current_project_id === 0) {
             $content = include_template('main.php', [
                 'tasks' => $tasks,
                 'projects' => $projects,
@@ -56,7 +56,7 @@ else {
                 'current_project_id' => $current_project_id
             ]);
         } else {
-            if (count_of_tasks($tasks, $current_project_id ) === 0) {
+            if (count_of_tasks($tasks, $current_project_id) === 0) {
                 http_response_code(404);
                 $content = include_template('error.php', ['error' => 'Задачи не найдены']);
             } else {
