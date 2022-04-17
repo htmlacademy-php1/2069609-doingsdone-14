@@ -13,11 +13,14 @@
  *
  * @return bool true при совпадении с форматом 'ГГГГ-ММ-ДД', иначе false
  */
-function is_date_valid(string $date) : bool {
+function is_date_valid(string $date) {
     $format_to_check = 'Y-m-d';
     $dateTimeObj = date_create_from_format($format_to_check, $date);
 
-    return $dateTimeObj !== false && array_sum(date_get_last_errors()) === 0;
+    if (!($dateTimeObj !== false && array_sum(date_get_last_errors()) === 0)) {
+        return null;
+    }
+    return "Введите дату в формате ГГГГ-ММ-ДД";
 }
 
 /**
@@ -142,3 +145,15 @@ function include_template($name, array $data = []) {
 
     return $result;
 }
+
+function validateCategory($id, $allowed_list) {
+    if (!in_array($id, $allowed_list)) {
+        return "Указана несуществующая категория";
+    }
+
+    return null;
+}
+
+
+
+

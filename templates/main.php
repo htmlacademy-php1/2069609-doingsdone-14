@@ -77,7 +77,9 @@
             </td>
             <!-- Вывод подгружаемого файла в таблицу -->
             <td class="task__file">
-                <a class="download-link" href="#">Home.psd</a>
+                <?php if ($task['path']): ?>
+                    <a class="download-link" href="/uploads/<?=$task['path']; ?>">File.txt</a>
+                <?php endif; ?>
             </td>
             <!-- Вывод категории в таблицу -->
             <td>

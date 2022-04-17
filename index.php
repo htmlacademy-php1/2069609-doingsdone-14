@@ -36,12 +36,13 @@ else {
     $result = mysqli_stmt_get_result($stmt);
     if ($result) {
         $projects = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    } else {
+    }
+    else {
         $error = mysqli_error($link);
         $content = include_template('error.php', ['error' => $error]);
     }
     $sql = 'SELECT t.name as task_name, p.name as project_name, p.id as project_id,' .
-        ' t.due_date as task_date, t.status as task_status'
+        ' t.due_date as task_date, t.status as task_status, t.link_to_file as path'
         . ' FROM tasks t JOIN projects p ON t.project_id = p.id WHERE t.user_id = ?';
     $stmt = db_get_prepare_stmt($link, $sql, [$current_user_id]);
     mysqli_stmt_execute($stmt);
@@ -55,11 +56,13 @@ else {
                 'show_complete_tasks' => $show_complete_tasks,
                 'current_project_id' => $current_project_id
             ]);
-        } else {
+        }
+        else {
             if (count_of_tasks($tasks, $current_project_id) === 0) {
                 http_response_code(404);
                 $content = include_template('error.php', ['error' => 'Задачи не найдены']);
-            } else {
+            }
+            else {
                 $content = include_template('main.php', [
                     'tasks' => $tasks,
                     'projects' => $projects,
@@ -68,7 +71,8 @@ else {
                 ]);
             }
         }
-    } else {
+    }
+    else {
         $error = mysqli_error($link);
         $content = include_template('error.php', ['error' => $error]);
     }
