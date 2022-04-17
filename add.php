@@ -100,6 +100,7 @@ else {
         $content = include_template('form_task.php', ['projects' => $projects, 'tasks' => $tasks]);
     }
 }
+
 $layout_content = include_template('layout.php',[
     'content' => $content,
     // ЗАЧЕМ??
