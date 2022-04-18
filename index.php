@@ -1,21 +1,16 @@
 <?php
 
 // Создаем функцию подсчета проектов number_of_pr, в зависимости от категории задачи
-function count_of_tasks($array_of_task, $id_of_category) {
-    $count_of_task = 0;
-    foreach ($array_of_task as $task){
-        if ($task['project_id']===$id_of_category){
-            $count_of_task++;
-        }
-    }
-    return $count_of_task;
-}
+
 define ('SECONDS_IN_DAY' , 86400);
 
 function is_task_important($task_date): bool
 {
+    if ($task_date) {
         $current_time = time();
-        return (strtotime($task_date)-$current_time < SECONDS_IN_DAY);
+        return (strtotime($task_date) - $current_time < SECONDS_IN_DAY);
+    }
+    return false;
 }
 require_once ('helpers.php');
 $show_complete_tasks = rand(0, 1);
@@ -29,11 +24,7 @@ if (!$link) {
     $content = include_template('error.php', ['error' => $error]);
 }
 else {
-    $sql = 'SELECT * FROM projects WHERE user_id = ?';
-    $stmt = db_get_prepare_stmt($link, $sql, [$current_user_id]);
-    //mysqli_stmt_bind_param($stmt, 'i', $current_user_id);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
+    require ('list_of_projects.php');
     if ($result) {
         $projects = mysqli_fetch_all($result, MYSQLI_ASSOC);
     }

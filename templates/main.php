@@ -87,7 +87,8 @@
             </td>
             <!-- Вывод даты в таблицу -->
             <td class="task__date">
-                <span><?=htmlspecialchars($task['task_date']); ?></span>
+                <span><?php if ($task['task_date']) {
+                        echo htmlspecialchars($task['task_date']); } ?></span>
             </td>
             </tr>
         <?php } //endforeach; ?>

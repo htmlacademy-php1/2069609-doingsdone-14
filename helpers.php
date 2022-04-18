@@ -13,14 +13,11 @@
  *
  * @return bool true при совпадении с форматом 'ГГГГ-ММ-ДД', иначе false
  */
-function is_date_valid(string $date) {
+function is_date_valid(string $date) : bool {
     $format_to_check = 'Y-m-d';
     $dateTimeObj = date_create_from_format($format_to_check, $date);
 
-    if (!($dateTimeObj !== false && array_sum(date_get_last_errors()) === 0)) {
-        return null;
-    }
-    return "Введите дату в формате ГГГГ-ММ-ДД";
+    return $dateTimeObj !== false && array_sum(date_get_last_errors()) === 0;
 }
 
 /**
@@ -146,14 +143,34 @@ function include_template($name, array $data = []) {
     return $result;
 }
 
-function validateCategory($id, $allowed_list) {
+function validate_category($id, $allowed_list) {
     if (!in_array($id, $allowed_list)) {
         return "Указана несуществующая категория";
     }
-
     return null;
 }
 
+function count_of_tasks($array_of_task, $id_of_category) {
+    $count_of_task = 0;
+    foreach ($array_of_task as $task){
+        if ($task['project_id']===$id_of_category){
+            $count_of_task++;
+        }
+    }
+    return $count_of_task;
+}
+
+function is_date_correct($date) {
+    if ($date) {
+        $current_time = time();
+        define ('SECONDS_IN_DAY' , 86400);
+        if (strtotime($date)+SECONDS_IN_DAY<$current_time)
+        {
+            return "дата должна быть больше или равна текущей";
+        }
+        return null;
+    }
+}
 
 
 

@@ -40,14 +40,14 @@
                     <div class="form__row">
                         <label class="form__label" for="date">Дата выполнения</label>
                         <?php $classname = isset($errors['due_date']) ? "form__input--error" : ""; ?>
-                        <input class="form__input form__input--date <?= $classname; ?>" type="text" name="due_date" id="date" value="" placeholder="Введите дату в формате ГГГГ-ММ-ДД">
+                        <input class="form__input form__input--date <?= $classname; ?>" type="text" name="due_date" id="date" value="<?= filter_input(INPUT_POST, 'due_date'); ?>" placeholder="Введите дату в формате ГГГГ-ММ-ДД">
                     </div>
 
                     <div class="form__row">
                         <label class="form__label" for="file">Файл</label>
 
                         <div class="form__input-file">
-                            <input class="visually-hidden" type="file" name="file_txt" id="file" value="">
+                            <input class="visually-hidden" type="file" name="file" id="file" value="<?= filter_input(INPUT_POST, 'link_to_file'); ?>">
 
                             <label class="button button--transparent" for="file">
                                 <span>Выберите файл</span>
