@@ -34,7 +34,7 @@ else {
     }
     $sql = 'SELECT t.name as task_name, p.name as project_name, p.id as project_id,' .
         ' t.due_date as task_date, t.status as task_status, t.link_to_file as path'
-        . ' FROM tasks t JOIN projects p ON t.project_id = p.id WHERE t.user_id = ?';
+        . ' FROM tasks t JOIN projects p ON t.project_id = p.id WHERE t.user_id = ? ORDER BY t.date_of_create DESC';
     $stmt = db_get_prepare_stmt($link, $sql, [$current_user_id]);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
