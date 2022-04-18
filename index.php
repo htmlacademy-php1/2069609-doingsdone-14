@@ -68,6 +68,7 @@ else {
         $content = include_template('error.php', ['error' => $error]);
     }
 }
+
 $layout_content = include_template('layout.php',['content' => $content, 'title'=> 'Дела в порядке']);
 print($layout_content);
 
