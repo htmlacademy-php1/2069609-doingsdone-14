@@ -36,7 +36,7 @@ else {
 
     $content = include_template('form_task.php', ['tasks' => $tasks, 'projects' => $projects]);
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $required = ['name', 'project_id'];
         $errors = [];
 
@@ -45,9 +45,8 @@ else {
                 return validate_category($value, $projects_ids);
             },
             'due_date' => function($value) {
-            return (is_date_correct($value));
-
-        }
+                return is_date_correct($value) && is_date_valid($value);
+            }
         ];
 
         $task = filter_input_array(INPUT_POST, ['name' => FILTER_DEFAULT, 'project_id' => FILTER_DEFAULT, 'due_date' => FILTER_DEFAULT], true);
@@ -65,16 +64,13 @@ else {
             }
         }
         $errors = array_filter($errors);
-        if ($task['due_date']){
-            if (!is_date_valid($task['due_date'])){
-                $errors['due_date'] = 'Введите дату в формате ГГГГ-ММ-ДД';
-            }
-        }
 
         if (!empty($_FILES['file']['name'])) {
             $tmp_name = $_FILES['file']['tmp_name'];
             $link_to_file = $_FILES['file']['name'];
-            $filename = uniqid();
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $file_type = finfo_file($finfo, $tmp_name);
+            $filename = uniqid() . ".$file_type";
             move_uploaded_file($tmp_name, 'uploads/' . $filename);
             $task['link_to_file'] = $filename;
         }
@@ -86,7 +82,7 @@ else {
             $content = include_template('form_task.php', ['tasks' => $tasks, 'errors' => $errors, 'projects' => $projects]);
         }
         else {
-            $sql = 'INSERT INTO tasks (date_of_create, name, link_to_file, due_date, user_id, project_id) VALUES (NOW(), ?, ?, ?, 3, ?)';
+            $sql = 'INSERT INTO tasks (date_of_create, name, link_to_file, due_date, user_id, project_id) VALUES (NOW(), ?, ?, ?, '. $current_user_id .', ?)';
             $stmt = db_get_prepare_stmt($link, $sql, [$task['name'], $task['link_to_file'], $task['due_date'], $task['project_id']]);
             $res = mysqli_stmt_execute($stmt);
             if ($res) {
