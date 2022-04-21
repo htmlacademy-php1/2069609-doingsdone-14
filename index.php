@@ -1,8 +1,6 @@
 <?php
-
-// Создаем функцию подсчета проектов number_of_pr, в зависимости от категории задачи
-
-define ('SECONDS_IN_DAY' , 86400);
+require_once ('init.php');
+require_once ('helpers.php');
 
 function is_task_important($task_date): bool
 {
@@ -12,12 +10,10 @@ function is_task_important($task_date): bool
     }
     return false;
 }
-require_once ('helpers.php');
+
 $show_complete_tasks = rand(0, 1);
 $current_user_id = 3;
 $current_project_id = (int) filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_NUMBER_INT);
-
-require_once 'init.php';
 
 if (!$link) {
     $error = mysqli_connect_error();
@@ -25,8 +21,8 @@ if (!$link) {
 }
 else {
     require ('list_of_projects.php');
-    if ($result) {
-        $projects = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    if ($list_of_projects) {
+        $projects = mysqli_fetch_all($list_of_projects, MYSQLI_ASSOC);
     }
     else {
         $error = mysqli_error($link);

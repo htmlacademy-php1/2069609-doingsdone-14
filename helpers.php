@@ -123,7 +123,7 @@ function include_template($name, array $data = []) {
     return $result;
 }
 
-function validate_category($id, $allowed_list) {
+function validate_project($id, $allowed_list) {
     if (!in_array($id, $allowed_list)) {
         return "Указана несуществующая категория";
     }
@@ -143,12 +143,12 @@ function count_of_tasks($array_of_task, $id_of_category) {
 function is_date_correct($date) {
     if ($date) {
         $current_time = time();
-        define ('SECONDS_IN_ONE_DAY' , 86400);
-        if (strtotime($date)+SECONDS_IN_ONE_DAY<$current_time)
+
+        if (strtotime($date)+SECONDS_IN_DAY<$current_time)
         {
-            return "Дата должна быть больше или равна текущей";
+            return true;
         }
-        return null;
+        return false;
     }
 }
 
@@ -157,9 +157,9 @@ function is_date_valid($date){
         $format_to_check = 'Y-m-d';
         $dateTimeObj = date_create_from_format($format_to_check, $date);
         if ($dateTimeObj !== false && array_sum(date_get_last_errors()) === 0) {
-            return "Введите дату в формате ГГГГ-ММ-ДД";
+            return false;
         }
-        return null;
+        return true;
     }
 }
 

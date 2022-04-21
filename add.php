@@ -13,8 +13,8 @@ else {
     require ('list_of_projects.php');
     $projects_ids = [];
 
-    if ($result) {
-        $projects = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    if ($list_of_projects) {
+        $projects = mysqli_fetch_all($list_of_projects, MYSQLI_ASSOC);
         $projects_ids = array_column($projects, 'id');
     }
     else {
@@ -42,10 +42,16 @@ else {
 
         $rules = [
             'project_id' => function ($value) use ($projects_ids) {
-                return validate_category($value, $projects_ids);
+                return validate_project($value, $projects_ids);
             },
             'due_date' => function($value) {
-                return is_date_correct($value) && is_date_valid($value);
+                if (is_date_correct($value)) {
+                    return "Дата должна быть больше или равна текущей";
+                }
+                if (is_date_valid($value)) {
+                    return "Введите дату в формате ГГГГ-ММ-ДД";
+                }
+                return null;
             }
         ];
 
@@ -82,8 +88,8 @@ else {
             $content = include_template('form_task.php', ['tasks' => $tasks, 'errors' => $errors, 'projects' => $projects]);
         }
         else {
-            $sql = 'INSERT INTO tasks (date_of_create, name, link_to_file, due_date, user_id, project_id) VALUES (NOW(), ?, ?, ?, '. $current_user_id .', ?)';
-            $stmt = db_get_prepare_stmt($link, $sql, [$task['name'], $task['link_to_file'], $task['due_date'], $task['project_id']]);
+            $sql = 'INSERT INTO tasks (date_of_create, name, link_to_file, due_date, user_id, project_id) VALUES (NOW(), ?, ?, ?, ?, ?)';
+            $stmt = db_get_prepare_stmt($link, $sql, [$task['name'], $task['link_to_file'], $task['due_date'], $current_user_id, $task['project_id']]);
             $res = mysqli_stmt_execute($stmt);
             if ($res) {
                 header("Location: /index.php");
