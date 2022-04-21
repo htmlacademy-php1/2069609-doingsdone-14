@@ -5,14 +5,14 @@
                     <ul class="main-navigation__list">
                         <?php foreach ($projects as $project): ?>
                             <li class="main-navigation__list-item">
-                                <a class="main-navigation__list-item-link" href="/index.php?project_id=<?=$project['id'] ?>"><?=$project['name'] ?></a>
+                                <a class="main-navigation__list-item-link" href="../index.php?project_id=<?=$project['id'] ?>"><?=$project['name'] ?></a>
                                 <span class="main-navigation__list-item-count"><?=count_of_tasks($tasks, $project['id']) ?></span>
                             </li>
                         <?php endforeach; ?>
                     </ul>
                 </nav>
 
-                <a class="button button--transparent button--plus content__side-button" href="/add_project.php">Добавить проект</a>
+                <a class="button button--transparent button--plus content__side-button" href="#">Добавить проект</a>
             </section>
 
             <main class="content__main">

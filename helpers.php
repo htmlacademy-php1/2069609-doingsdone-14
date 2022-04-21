@@ -1,6 +1,27 @@
 <?php
 
 /**
+ * Проверяет переданную дату на соответствие формату 'ГГГГ-ММ-ДД'
+ *
+ * Примеры использования:
+ * is_date_valid('2019-01-01'); // true
+ * is_date_valid('2016-02-29'); // true
+ * is_date_valid('2019-04-31'); // false
+ * is_date_valid('10.10.2010'); // false
+ * is_date_valid('10/10/2010'); // false
+ *
+ * @param string $date Дата в виде строки
+ *
+ * @return bool true при совпадении с форматом 'ГГГГ-ММ-ДД', иначе false
+ */
+function is_date_valid(string $date) : bool {
+    $format_to_check = 'Y-m-d';
+    $dateTimeObj = date_create_from_format($format_to_check, $date);
+
+    return $dateTimeObj !== false && array_sum(date_get_last_errors()) === 0;
+}
+
+/**
  * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
  *
  * @param $link mysqli Ресурс соединения
@@ -140,27 +161,9 @@ function count_of_tasks($array_of_task, $id_of_category) {
     return $count_of_task;
 }
 
-function is_date_correct($date) {
-    if ($date) {
+function is_date_greater_than_today($date): bool {
         $current_time = time();
-
-        if (strtotime($date)+SECONDS_IN_DAY<$current_time)
-        {
-            return true;
-        }
-        return false;
-    }
-}
-
-function is_date_valid($date){
-    if ($date) {
-        $format_to_check = 'Y-m-d';
-        $dateTimeObj = date_create_from_format($format_to_check, $date);
-        if ($dateTimeObj !== false && array_sum(date_get_last_errors()) === 0) {
-            return false;
-        }
-        return true;
-    }
+        return strtotime($date) + SECONDS_IN_DAY > $current_time;
 }
 
 

@@ -45,13 +45,15 @@ else {
                 return validate_project($value, $projects_ids);
             },
             'due_date' => function($value) {
-                if (is_date_correct($value)) {
-                    return "Дата должна быть больше или равна текущей";
+                if ($value) {
+                    if (!is_date_greater_than_today($value)) {
+                        return "Дата должна быть больше или равна текущей";
+                    }
+                    if (!is_date_valid($value)) {
+                        return "Введите дату в формате ГГГГ-ММ-ДД";
+                    }
+                    return null;
                 }
-                if (is_date_valid($value)) {
-                    return "Введите дату в формате ГГГГ-ММ-ДД";
-                }
-                return null;
             }
         ];
 
@@ -61,12 +63,12 @@ else {
         }
 
         foreach ($task as $key => $value) {
+            if (in_array($key, $required) && empty($value)) {
+                $errors[$key] = "Поле $key надо заполнить";
+            }
             if (isset($rules[$key])) {
                 $rule = $rules[$key];
                 $errors[$key] = $rule($value);
-            }
-            if (in_array($key, $required) && empty($value)) {
-                $errors[$key] = "Поле $key надо заполнить";
             }
         }
         $errors = array_filter($errors);

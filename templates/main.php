@@ -11,7 +11,7 @@
                                 echo ' main-navigation__list-item--active';
                                }
                         ?>"
-                       href="/index.php?project_id=<?=$project['id'] ?>"><?=htmlspecialchars($project['name']) ?></a>
+                       href="../index.php?project_id=<?=$project['id'] ?>"><?=htmlspecialchars($project['name']) ?></a>
                     <!-- Выводим количество с помощью функции-->
                     <span class="main-navigation__list-item-count"><?=count_of_tasks($tasks, $project['id']) ?></span>
                 </li>
@@ -20,7 +20,7 @@
     </nav>
 
     <a class="button button--transparent button--plus content__side-button"
-       href="/add_project.php" target="project_add">Добавить проект</a>
+       href="#" target="project_add">Добавить проект</a>
 </section>
 
 <main class="content__main">
@@ -78,7 +78,7 @@
             <!-- Вывод подгружаемого файла в таблицу -->
             <td class="task__file">
                 <?php if ($task['path']): ?>
-                    <a class="download-link" href="/uploads/<?=$task['path']; ?>"><?=htmlspecialchars($task['path']); ?></a>
+                    <a class="download-link" href="../uploads/<?=$task['path']; ?>"><?=htmlspecialchars($task['path']); ?></a>
                 <?php endif; ?>
             </td>
             <!-- Вывод категории в таблицу -->
