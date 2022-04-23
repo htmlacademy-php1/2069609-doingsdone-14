@@ -56,19 +56,22 @@
                 }
             }
             // если задача выполнена и $show_complete_tasks=0, пропускаем итерацию и не выводим задачу
-            if ($task['task_status']===true and $show_complete_tasks===0) {
+            if ($task['task_status']===1 and $show_complete_tasks===0) {
                 continue;
-            } ?>
-        <tr class="tasks__item task">
-            <!--Если задача выполнена, добавляем строчке класс task--completed-->
-            <?php if ($task['task_status']===true): ?>
-                <tr class="tasks__item task<?=' task--completed' ?>">
-            <?php endif; ?>
-            <!--Если до выполенений задачи осталось менее 24 часов, строке добавляем класс task--important -->
-            <?php if (is_task_important($task['task_date'])): ?>
-                <tr class="tasks__item task<?=' task--important' ?>">
-            <?php endif; ?>
+            }
 
+            if (is_task_important($task['task_date'])) {
+                if ($task['task_status'] === 1) {
+                    $classname = ' task--completed';
+                } else {
+                    $classname = ' task--important';
+                }
+            }
+            else {
+                $classname = '';
+            } ?>
+
+        <tr class="tasks__item task <?=$classname;?>">
             <td class="task__select">
                 <label class="checkbox task__checkbox">
                     <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
