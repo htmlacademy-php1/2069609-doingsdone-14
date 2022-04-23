@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Проверяет переданную дату на соответствие формату 'ГГГГ-ММ-ДД'
  *
@@ -142,3 +143,27 @@ function include_template($name, array $data = []) {
 
     return $result;
 }
+
+function validate_project($id, $allowed_list) {
+    if (!in_array($id, $allowed_list)) {
+        return "Указана несуществующая категория";
+    }
+    return null;
+}
+
+function count_of_tasks($array_of_task, $id_of_category) {
+    $count_of_task = 0;
+    foreach ($array_of_task as $task){
+        if ($task['project_id']===$id_of_category){
+            $count_of_task++;
+        }
+    }
+    return $count_of_task;
+}
+
+function is_date_greater_than_today($date): bool {
+        $current_time = time();
+        return strtotime($date) + SECONDS_IN_DAY > $current_time;
+}
+
+

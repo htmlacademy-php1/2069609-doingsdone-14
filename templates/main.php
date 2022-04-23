@@ -11,7 +11,7 @@
                                 echo ' main-navigation__list-item--active';
                                }
                         ?>"
-                       href="/index.php?project_id=<?=$project['id'] ?>"><?=htmlspecialchars($project['name']) ?></a>
+                       href="../index.php?project_id=<?=$project['id'] ?>"><?=htmlspecialchars($project['name']) ?></a>
                     <!-- Выводим количество с помощью функции-->
                     <span class="main-navigation__list-item-count"><?=count_of_tasks($tasks, $project['id']) ?></span>
                 </li>
@@ -20,7 +20,7 @@
     </nav>
 
     <a class="button button--transparent button--plus content__side-button"
-       href="pages/form-project.html" target="project_add">Добавить проект</a>
+       href="#" target="project_add">Добавить проект</a>
 </section>
 
 <main class="content__main">
@@ -77,7 +77,9 @@
             </td>
             <!-- Вывод подгружаемого файла в таблицу -->
             <td class="task__file">
-                <a class="download-link" href="#">Home.psd</a>
+                <?php if ($task['path']): ?>
+                    <a class="download-link" href="../uploads/<?=$task['path']; ?>"><?=htmlspecialchars($task['path']); ?></a>
+                <?php endif; ?>
             </td>
             <!-- Вывод категории в таблицу -->
             <td>
@@ -85,7 +87,8 @@
             </td>
             <!-- Вывод даты в таблицу -->
             <td class="task__date">
-                <span><?=htmlspecialchars($task['task_date']); ?></span>
+                <span><?php if ($task['task_date']) {
+                        echo htmlspecialchars($task['task_date']); } ?></span>
             </td>
             </tr>
         <?php } //endforeach; ?>
