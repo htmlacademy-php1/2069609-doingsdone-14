@@ -72,10 +72,11 @@ else {
         foreach ($task as $key => $value) {
             if (in_array($key, $required) && empty($value)) {
                 $errors[$key] = "Поле $key надо заполнить";
-            }
-            if (isset($rules[$key])) {
-                $rule = $rules[$key];
-                $errors[$key] = $rule($value);
+            } else {
+                if (isset($rules[$key])) {
+                    $rule = $rules[$key];
+                    $errors[$key] = $rule($value);
+                }
             }
         }
         $errors = array_filter($errors);

@@ -166,4 +166,13 @@ function is_date_greater_than_today($date): bool {
         return strtotime($date) + SECONDS_IN_DAY > $current_time;
 }
 
+function validate_length($value, $max) {
+    if ($value) {
+        $len = strlen($value);
+        if  ($len > $max) {
+            return "Значение должно быть от до $max символов";
+        }
+    }
 
+    return null;
+}

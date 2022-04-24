@@ -6,23 +6,50 @@ $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $form = $_POST;
-    $req_fields = ['name', 'email', 'password'];
+    $required = ['name', 'email', 'password'];
 
-    foreach ($req_fields as $field) {
-        if (empty($form[$field])) {
-            $errors[$field] = "Не заполнено поле " . $field;
+
+
+    $rules = [
+        'name' => function ($value) {
+            return validate_length($value, 255);
+        },
+        'email' => function($value) {
+            if ($value) {
+                return validate_length($value, 255);
+            }
+            if (!(filter_var($value, FILTER_VALIDATE_EMAIL))) {
+                return "Введите корректный email";
+            }
+            else {
+                return null;
+            }
+        }
+    ];
+
+    $form = filter_input_array(INPUT_POST, [
+        'name' => FILTER_DEFAULT,
+        'email' => FILTER_DEFAULT,
+        'password' => FILTER_DEFAULT],
+        true);
+    foreach ($form as $key => $value) {
+        if (in_array($key, $required) && empty($value)) {
+            $errors[$key] = "Поле $key надо заполнить";
+        } else {
+            if (isset($rules[$key])) {
+                $rule = $rules[$key];
+                $errors[$key] = $rule($value);
+            }
         }
     }
-    if ($form['email']){
-        if (!(filter_var($form['email'], FILTER_VALIDATE_EMAIL))) {
-            $errors['email'] = "Введите корректный email";
-        }
-    }
+  $errors = array_filter($errors);
 
     if (empty($errors)) {
         $email = mysqli_real_escape_string($link, $form['email']);
-        $sql = "SELECT id FROM users WHERE email = '$email'";
-        $res = mysqli_query($link, $sql);
+        $sql = 'SELECT id FROM users WHERE email = ?';
+        $stmt = db_get_prepare_stmt($link, $sql, [$email]);
+        mysqli_stmt_execute($stmt);
+        $res = mysqli_stmt_get_result($stmt);
         if (mysqli_num_rows($res) > 0) {
             $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
         }
