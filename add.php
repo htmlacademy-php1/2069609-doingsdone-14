@@ -34,7 +34,9 @@ else {
         $content = include_template('error.php', ['error' => $error]);
     }
 
-    $content = include_template('form_task.php', ['tasks' => $tasks, 'projects' => $projects]);
+    $content = include_template('form_task.php', [
+        'tasks' => $tasks,
+        'projects' => $projects]);
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $required = ['name', 'project_id'];
@@ -57,7 +59,12 @@ else {
             }
         ];
 
-        $task = filter_input_array(INPUT_POST, ['name' => FILTER_DEFAULT, 'project_id' => FILTER_DEFAULT, 'due_date' => FILTER_DEFAULT], true);
+        $task = filter_input_array(INPUT_POST, [
+            'name' => FILTER_DEFAULT,
+            'project_id' => FILTER_DEFAULT,
+            'due_date' => FILTER_DEFAULT],
+            true);
+
         if (empty($task['due_date'])) {
             $task['due_date'] = null;
         }
@@ -65,10 +72,11 @@ else {
         foreach ($task as $key => $value) {
             if (in_array($key, $required) && empty($value)) {
                 $errors[$key] = "Поле $key надо заполнить";
-            }
-            if (isset($rules[$key])) {
-                $rule = $rules[$key];
-                $errors[$key] = $rule($value);
+            } else {
+                if (isset($rules[$key])) {
+                    $rule = $rules[$key];
+                    $errors[$key] = $rule($value);
+                }
             }
         }
         $errors = array_filter($errors);
@@ -87,10 +95,14 @@ else {
         }
 
         if (count($errors)) {
-            $content = include_template('form_task.php', ['tasks' => $tasks, 'errors' => $errors, 'projects' => $projects]);
+            $content = include_template('form_task.php', [
+                'tasks' => $tasks,
+                'errors' => $errors,
+                'projects' => $projects]);
         }
         else {
-            $sql = 'INSERT INTO tasks (date_of_create, name, link_to_file, due_date, user_id, project_id) VALUES (NOW(), ?, ?, ?, ?, ?)';
+            $sql = 'INSERT INTO tasks (date_of_create, name, link_to_file, due_date, user_id, project_id)' .
+                ' VALUES (NOW(), ?, ?, ?, ?, ?)';
             $stmt = db_get_prepare_stmt($link, $sql, [$task['name'], $task['link_to_file'], $task['due_date'], $current_user_id, $task['project_id']]);
             $res = mysqli_stmt_execute($stmt);
             if ($res) {
@@ -99,7 +111,9 @@ else {
         }
     }
     else {
-        $content = include_template('form_task.php', ['projects' => $projects, 'tasks' => $tasks]);
+        $content = include_template('form_task.php', [
+            'projects' => $projects,
+            'tasks' => $tasks]);
     }
 }
 $layout_content = include_template('layout.php',[

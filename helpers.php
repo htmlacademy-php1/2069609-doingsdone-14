@@ -166,4 +166,8 @@ function is_date_greater_than_today($date): bool {
         return strtotime($date) + SECONDS_IN_DAY > $current_time;
 }
 
+function is_validate_length($value, $max):bool {
+    $len = mb_strlen($value);
+    return ($len < $max);
+}
 
