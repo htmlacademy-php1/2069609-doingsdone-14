@@ -168,7 +168,7 @@ function is_date_greater_than_today($date): bool {
 
 function validate_length($value, $max) {
     if ($value) {
-        $len = strlen($value);
+        $len = mb_strlen($value);
         if  ($len > $max) {
             return "Значение должно быть от до $max символов";
         }

@@ -3,6 +3,7 @@
 require_once('init.php');
 require_once('helpers.php');
 $errors = [];
+define('MAXIMUM_LENGTH',255);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $form = $_POST;
@@ -12,11 +13,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $rules = [
         'name' => function ($value) {
-            return validate_length($value, 255);
+            return validate_length($value, MAXIMUM_LENGTH);
         },
         'email' => function($value) {
             if ($value) {
-                return validate_length($value, 255);
+                return validate_length($value, MAXIMUM_LENGTH);
             }
             if (!(filter_var($value, FILTER_VALIDATE_EMAIL))) {
                 return "Введите корректный email";
