@@ -162,12 +162,11 @@ function count_of_tasks($array_of_task, $id_of_category) {
 }
 
 function is_date_greater_than_today($date): bool {
-        $current_time = time();
-        return strtotime($date) + SECONDS_IN_DAY > $current_time;
+    $current_time = time();
+    return strtotime($date) + SECONDS_IN_DAY > $current_time;
 }
 
 function is_validate_length($value, $max):bool {
     $len = mb_strlen($value);
     return ($len < $max);
 }
-

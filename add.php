@@ -2,7 +2,7 @@
 
 require_once ('helpers.php');
 require_once 'init.php';
-$current_user_id = 3;
+$current_user_id = $_SESSION['user']['id'];
 
 
 if (!$link) {
@@ -72,7 +72,8 @@ else {
         foreach ($task as $key => $value) {
             if (in_array($key, $required) && empty($value)) {
                 $errors[$key] = "Поле $key надо заполнить";
-            } else {
+            }
+            else {
                 if (isset($rules[$key])) {
                     $rule = $rules[$key];
                     $errors[$key] = $rule($value);

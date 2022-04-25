@@ -3,14 +3,10 @@
 require_once('init.php');
 require_once('helpers.php');
 $errors = [];
-define('MAXIMUM_LENGTH',255);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $form = $_POST;
     $required = ['name', 'email', 'password'];
-
-
-
     $rules = [
         'email' => function($value) {
             if ($value) {
@@ -32,7 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     ];
 
-
     $form = filter_input_array(INPUT_POST, [
         'name' => FILTER_DEFAULT,
         'email' => FILTER_DEFAULT,
@@ -48,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
-  $errors = array_filter($errors);
+    $errors = array_filter($errors);
 
     if (empty($errors)) {
         $email = mysqli_real_escape_string($link, $form['email']);
