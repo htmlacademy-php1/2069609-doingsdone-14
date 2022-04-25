@@ -12,21 +12,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
     $rules = [
-        'name' => function ($value) {
-            return validate_length($value, MAXIMUM_LENGTH);
-        },
         'email' => function($value) {
             if ($value) {
-                return validate_length($value, MAXIMUM_LENGTH);
-            }
-            if (!(filter_var($value, FILTER_VALIDATE_EMAIL))) {
-                return "Введите корректный email";
-            }
-            else {
+                if (!is_validate_length($value, MAXIMUM_LENGTH)) {
+                    return "Длина не более 255 символов";
+                }
+                if (!(filter_var($value, FILTER_VALIDATE_EMAIL))) {
+                    return "Введите корректный email";
+                }
                 return null;
             }
+            return null;
+        },
+        'name' => function($value) {
+            if (!is_validate_length($value, MAXIMUM_LENGTH)) {
+                return "Длина не более 255 символов";
+            }
+            return null;
         }
     ];
+
 
     $form = filter_input_array(INPUT_POST, [
         'name' => FILTER_DEFAULT,
