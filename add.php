@@ -2,8 +2,19 @@
 
 require_once ('helpers.php');
 require_once 'init.php';
-$current_user_id = $_SESSION['user']['id'];
 
+if(isset($_SESSION['user'])) {
+    $current_user_id = $_SESSION['user']['id'];
+    $is_auth = 1;
+    $current_user_name = $_SESSION['user']['name'];
+}
+else {
+    $is_auth = 0;
+    $current_user_name = '';
+    // спросить, почему здесь в адресе нужен слеш
+    header("Location: /auth.php");
+    exit();
+}
 
 if (!$link) {
     $error = mysqli_connect_error();
@@ -26,6 +37,7 @@ else {
     $stmt = db_get_prepare_stmt($link, $sql, [$current_user_id]);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
+
     if ($result) {
         $tasks = mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
@@ -36,18 +48,19 @@ else {
 
     $content = include_template('form_task.php', [
         'tasks' => $tasks,
-        'projects' => $projects]);
+        'projects' => $projects
+    ]);
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $required = ['name', 'project_id'];
         $errors = [];
-
         $rules = [
             'project_id' => function ($value) use ($projects_ids) {
                 return validate_project($value, $projects_ids);
             },
             'due_date' => function($value) {
                 if ($value) {
+                    // потом попробовать поменять местами, посмотреть что будет
                     if (!is_date_greater_than_today($value)) {
                         return "Дата должна быть больше или равна текущей";
                     }
@@ -56,6 +69,8 @@ else {
                     }
                     return null;
                 }
+                //добавила недавно
+                return null;
             }
         ];
 
@@ -63,7 +78,8 @@ else {
             'name' => FILTER_DEFAULT,
             'project_id' => FILTER_DEFAULT,
             'due_date' => FILTER_DEFAULT],
-            true);
+            true
+        );
 
         if (empty($task['due_date'])) {
             $task['due_date'] = null;
@@ -99,7 +115,8 @@ else {
             $content = include_template('form_task.php', [
                 'tasks' => $tasks,
                 'errors' => $errors,
-                'projects' => $projects]);
+                'projects' => $projects
+            ]);
         }
         else {
             $sql = 'INSERT INTO tasks (date_of_create, name, link_to_file, due_date, user_id, project_id)' .
@@ -114,14 +131,17 @@ else {
     else {
         $content = include_template('form_task.php', [
             'projects' => $projects,
-            'tasks' => $tasks]);
+            'tasks' => $tasks
+        ]);
     }
 }
+
 $layout_content = include_template('layout.php',[
     'content' => $content,
-    // ЗАЧЕМ??
-    //'projects' => [],
-    //'tasks' => [],
-    'title'=> 'Дела в порядке']);
+    'title'=> 'Дела в порядке',
+    'is_auth' => $is_auth,
+    'current_user_name' => $current_user_name
+]);
+
 print($layout_content);
 ?>

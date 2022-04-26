@@ -12,6 +12,7 @@ function is_task_important($task_date): bool
 }
 
 $show_complete_tasks = rand(0, 1);
+//уточнить
 $current_project_id = (int) filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_NUMBER_INT);
 
 if (!$link) {
@@ -67,7 +68,15 @@ else {
     }
 }
 
-$layout_content = include_template('layout.php',['content' => $content, 'title'=> 'Дела в порядке']);
+require('values_is_auth_and_current_user_name.php');
+
+$layout_content = include_template('layout.php',[
+            'content' => $content,
+            'title'=> 'Дела в порядке',
+            'current_user_name' => $current_user_name,
+            'is_auth' => $is_auth
+]);
+
 print($layout_content);
 
 ?>

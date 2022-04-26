@@ -81,7 +81,7 @@
                 <!-- Вывод подгружаемого файла в таблицу -->
                 <td class="task__file">
                     <?php if ($task['path']): ?>
-                        <a class="download-link" href="../uploads/<?=$task['path']; ?>"><?=htmlspecialchars($task['path']); ?></a>
+                        <a class="download-link" href="uploads/<?=$task['path']; ?>"><?=htmlspecialchars($task['path']); ?></a>
                     <?php endif; ?>
                 </td>
                 <!-- Вывод категории в таблицу -->

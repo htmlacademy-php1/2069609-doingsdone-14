@@ -32,7 +32,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'name' => FILTER_DEFAULT,
         'email' => FILTER_DEFAULT,
         'password' => FILTER_DEFAULT],
-        true);
+        true
+    );
+
     foreach ($form as $key => $value) {
         if (in_array($key, $required) && empty($value)) {
             $errors[$key] = "Поле $key надо заполнить";
@@ -69,10 +71,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $content = include_template('register.php', ['errors'=>$errors]);
+require('values_is_auth_and_current_user_name.php');
 
 $layout_content = include_template('layout.php', [
     'content' => $content,
-    'title' => 'Дела в порядке'
+    'title' => 'Дела в порядке',
+    'current_user_name' => $current_user_name,
+    'is_auth' => $is_auth
 ]);
 
 print($layout_content);
