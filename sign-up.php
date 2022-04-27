@@ -64,14 +64,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $res = mysqli_stmt_execute($stmt);
         }
         if ($res && empty($errors)) {
-            header("Location: /index.php");
+            header("Location: index.php");
             exit();
         }
     }
 }
 
 $content = include_template('register.php', ['errors'=>$errors]);
-require('values_is_auth_and_current_user_name.php');
+require('session_init.php');
 
 $layout_content = include_template('layout.php', [
     'content' => $content,

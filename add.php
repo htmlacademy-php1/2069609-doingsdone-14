@@ -1,18 +1,15 @@
 <?php
 
-require_once ('helpers.php');
-require_once 'init.php';
+require_once('helpers.php');
+require_once('init.php');
 
-if(isset($_SESSION['user'])) {
+require('session_init.php');
+
+if ($is_auth == 1) {
     $current_user_id = $_SESSION['user']['id'];
-    $is_auth = 1;
-    $current_user_name = $_SESSION['user']['name'];
 }
 else {
-    $is_auth = 0;
-    $current_user_name = '';
-    // спросить, почему здесь в адресе нужен слеш
-    header("Location: /auth.php");
+    header("Location: auth.php");
     exit();
 }
 
@@ -124,7 +121,7 @@ else {
             $stmt = db_get_prepare_stmt($link, $sql, [$task['name'], $task['link_to_file'], $task['due_date'], $current_user_id, $task['project_id']]);
             $res = mysqli_stmt_execute($stmt);
             if ($res) {
-                header("Location: /index.php");
+                header("Location: index.php");
             }
         }
     }

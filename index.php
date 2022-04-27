@@ -68,7 +68,7 @@ else {
     }
 }
 
-require('values_is_auth_and_current_user_name.php');
+require('session_init.php');
 
 $layout_content = include_template('layout.php',[
             'content' => $content,

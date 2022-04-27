@@ -3,7 +3,6 @@ require_once ('helpers.php');
 require_once ('init.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $form = $_POST;
     $required = ['email', 'password'];
     $errors = [];
 
@@ -47,8 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['email'] = 'Такой пользователь не найден';
     }
     if (!count($errors)) {
-        header("Location: /index.php");
-        // что за exit?
+        header("Location: index.php");
         exit();
     }
     else {
@@ -59,12 +57,12 @@ else {
     $content = include_template('auth.php');
 
     if (isset($_SESSION['user'])) {
-        header("Location: /index.php");
+        header("Location: index.php");
         exit();
     }
 }
 
-require('values_is_auth_and_current_user_name.php');
+require('session_init.php');
 
 $layout_content = include_template('layout.php', [
     'is_auth' => $is_auth,
