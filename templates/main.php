@@ -8,9 +8,9 @@
                     <!-- Выделяем текущий проект с помощью доп. класса main-navigation__list-item--active -->
                     <a class="main-navigation__list-item-link
                         <?php if ($project['id']===$current_project_id) {
-                                echo ' main-navigation__list-item--active';
-                               }
-                        ?>"
+                        echo ' main-navigation__list-item--active';
+                    }
+                    ?>"
                        href="../index.php?project_id=<?=$project['id'] ?>"><?=htmlspecialchars($project['name']) ?></a>
                     <!-- Выводим количество с помощью функции-->
                     <span class="main-navigation__list-item-count"><?=count_of_tasks($tasks, $project['id']) ?></span>
@@ -71,28 +71,28 @@
                 $classname = '';
             } ?>
 
-        <tr class="tasks__item task <?=$classname;?>">
-            <td class="task__select">
-                <label class="checkbox task__checkbox">
-                    <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
-                    <span class="checkbox__text"><?=htmlspecialchars($task['task_name']); ?></span>
-                </label>
-            </td>
-            <!-- Вывод подгружаемого файла в таблицу -->
-            <td class="task__file">
-                <?php if ($task['path']): ?>
-                    <a class="download-link" href="../uploads/<?=$task['path']; ?>"><?=htmlspecialchars($task['path']); ?></a>
-                <?php endif; ?>
-            </td>
-            <!-- Вывод категории в таблицу -->
-            <td>
-                <span><?=htmlspecialchars($task['project_name']); ?></span>
-            </td>
-            <!-- Вывод даты в таблицу -->
-            <td class="task__date">
+            <tr class="tasks__item task <?=$classname;?>">
+                <td class="task__select">
+                    <label class="checkbox task__checkbox">
+                        <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
+                        <span class="checkbox__text"><?=htmlspecialchars($task['task_name']); ?></span>
+                    </label>
+                </td>
+                <!-- Вывод подгружаемого файла в таблицу -->
+                <td class="task__file">
+                    <?php if ($task['path']): ?>
+                        <a class="download-link" href="uploads/<?=$task['path']; ?>"><?=htmlspecialchars($task['path']); ?></a>
+                    <?php endif; ?>
+                </td>
+                <!-- Вывод категории в таблицу -->
+                <td>
+                    <span><?=htmlspecialchars($task['project_name']); ?></span>
+                </td>
+                <!-- Вывод даты в таблицу -->
+                <td class="task__date">
                 <span><?php if ($task['task_date']) {
                         echo htmlspecialchars($task['task_date']); } ?></span>
-            </td>
+                </td>
             </tr>
         <?php } //endforeach; ?>
     </table>

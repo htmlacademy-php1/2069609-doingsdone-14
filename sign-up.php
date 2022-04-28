@@ -3,14 +3,10 @@
 require_once('init.php');
 require_once('helpers.php');
 $errors = [];
-define('MAXIMUM_LENGTH',255);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $form = $_POST;
     $required = ['name', 'email', 'password'];
-
-
-
     $rules = [
         'email' => function($value) {
             if ($value) {
@@ -32,12 +28,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     ];
 
-
     $form = filter_input_array(INPUT_POST, [
         'name' => FILTER_DEFAULT,
         'email' => FILTER_DEFAULT,
         'password' => FILTER_DEFAULT],
-        true);
+        true
+    );
+
     foreach ($form as $key => $value) {
         if (in_array($key, $required) && empty($value)) {
             $errors[$key] = "Поле $key надо заполнить";
@@ -48,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
-  $errors = array_filter($errors);
+    $errors = array_filter($errors);
 
     if (empty($errors)) {
         $email = mysqli_real_escape_string($link, $form['email']);
@@ -67,17 +64,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $res = mysqli_stmt_execute($stmt);
         }
         if ($res && empty($errors)) {
-            header("Location: /index.php");
+            header("Location: index.php");
             exit();
         }
     }
 }
 
 $content = include_template('register.php', ['errors'=>$errors]);
+require('session_init.php');
 
 $layout_content = include_template('layout.php', [
     'content' => $content,
-    'title' => 'Дела в порядке'
+    'title' => 'Дела в порядке',
+    'current_user_name' => $current_user_name,
+    'is_auth' => $is_auth
 ]);
 
 print($layout_content);
