@@ -26,8 +26,8 @@
 <main class="content__main">
     <h2 class="content__main-heading">Список задач</h2>
 
-    <form class="search-form" action="index.php" method="post" autocomplete="off">
-        <input class="search-form__input" type="text" name="" value="" placeholder="Поиск по задачам">
+    <form class="search-form" action="index.php" method="GET" autocomplete="off">
+        <input class="search-form__input" type="text" name="q" value="" placeholder="Поиск по задачам">
         <input class="search-form__submit" type="submit" name="" value="Искать">
     </form>
 
@@ -47,6 +47,7 @@
     </div>
 
     <table class="tasks">
+        <?php >
         <!--Добавляем каждой задаче новую строчку с названием, категорией и датой-->
         <?php foreach ($tasks as $task) {
             // Проверяем, задан ли странице параметр запроса project_id

@@ -31,6 +31,9 @@ CREATE TABLE tasks (
 ALTER TABLE tasks
   MODIFY COLUMN due_date DATE;
 
+ALTER TABLE tasks
+ ADD FULLTEXT task_search(name);
+
 
 
 
