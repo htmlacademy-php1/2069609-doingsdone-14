@@ -12,7 +12,6 @@ function is_task_important($task_date): bool
 }
 
 $show_complete_tasks = rand(0, 1);
-//уточнить
 $current_project_id = (int) filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_NUMBER_INT);
 
 if (!$link) {
