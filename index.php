@@ -1,6 +1,6 @@
 <?php
-require_once ('init.php');
-require_once ('helpers.php');
+require_once 'init.php';
+require_once 'helpers.php';
 
 function is_task_important($task_date): bool
 {
@@ -11,7 +11,7 @@ function is_task_important($task_date): bool
     return false;
 }
 
-$show_complete_tasks = rand(0, 1);
+$show_complete_tasks = 1;
 $current_project_id = (int) filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_NUMBER_INT);
 
 if (!$link) {
@@ -21,7 +21,7 @@ if (!$link) {
 else {
     if (array_key_exists ('user', $_SESSION)) {
         $current_user_id = $_SESSION['user']['id'];
-        require('list_of_projects.php');
+        require 'list_of_projects.php';
         if ($list_of_projects) {
             $projects = mysqli_fetch_all($list_of_projects, MYSQLI_ASSOC);
         } else {
@@ -36,6 +36,7 @@ else {
             $stmt = db_get_prepare_stmt($link, $sql, [$current_user_id]);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
+            $message = 0;
             if ($result) {
                 $tasks = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 if ($current_project_id === 0) {
@@ -44,7 +45,8 @@ else {
                         'tasks' => $tasks,
                         'projects' => $projects,
                         'show_complete_tasks' => $show_complete_tasks,
-                        'current_project_id' => $current_project_id
+                        'current_project_id' => $current_project_id,
+                        'message'=>$message
                     ]);
 
                 } else {
@@ -56,7 +58,8 @@ else {
                             'tasks' => $tasks,
                             'projects' => $projects,
                             'show_complete_tasks' => $show_complete_tasks,
-                            'current_project_id' => $current_project_id
+                            'current_project_id' => $current_project_id,
+                            'message'=>$message
                         ]);
                     }
                 }
@@ -66,7 +69,7 @@ else {
             }
         }
         else {
-            require 'search.php';
+            require_once 'search.php';
         }
     } else{
         $content = include_template('guest.php');
