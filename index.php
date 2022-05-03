@@ -76,7 +76,7 @@ else {
     }
 }
 
-require('session_init.php');
+require 'session_init.php';
 
 $layout_content = include_template('layout.php',[
             'content' => $content,
