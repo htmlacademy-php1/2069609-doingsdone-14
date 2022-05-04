@@ -36,7 +36,6 @@ else {
             $stmt = db_get_prepare_stmt($link, $sql, [$current_user_id]);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
-            $message = 0;
             if ($result) {
                 $tasks = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 if ($current_project_id === 0) {
@@ -45,8 +44,7 @@ else {
                         'tasks' => $tasks,
                         'projects' => $projects,
                         'show_complete_tasks' => $show_complete_tasks,
-                        'current_project_id' => $current_project_id,
-                        'message'=>$message
+                        'current_project_id' => $current_project_id
                     ]);
 
                 } else {
@@ -58,8 +56,7 @@ else {
                             'tasks' => $tasks,
                             'projects' => $projects,
                             'show_complete_tasks' => $show_complete_tasks,
-                            'current_project_id' => $current_project_id,
-                            'message'=>$message
+                            'current_project_id' => $current_project_id
                         ]);
                     }
                 }
