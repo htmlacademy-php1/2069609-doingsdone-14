@@ -8,9 +8,9 @@
                     <!-- Выделяем текущий проект с помощью доп. класса main-navigation__list-item--active -->
                     <a class="main-navigation__list-item-link
                         <?php if ($project['id']===$current_project_id) {
-                        echo ' main-navigation__list-item--active';
-                    }
-                    ?>"
+                            echo ' main-navigation__list-item--active';
+                        }
+                        ?>"
                        href="../index.php?project_id=<?=$project['id'] ?>"><?=htmlspecialchars($project['name']) ?></a>
                     <!-- Выводим количество с помощью функции-->
                     <span class="main-navigation__list-item-count"><?=count_of_tasks($tasks, $project['id']) ?></span>
@@ -26,8 +26,8 @@
 <main class="content__main">
     <h2 class="content__main-heading">Список задач</h2>
 
-    <form class="search-form" action="index.php" method="post" autocomplete="off">
-        <input class="search-form__input" type="text" name="" value="" placeholder="Поиск по задачам">
+    <form class="search-form" action="index.php" method="GET" autocomplete="off">
+        <input class="search-form__input" type="text" name="q" value="<?=filter_input(INPUT_GET,'q', FILTER_SANITIZE_SPECIAL_CHARS) ?>" placeholder="Поиск по задачам">
         <input class="search-form__submit" type="submit" name="" value="Искать">
     </form>
 
@@ -47,53 +47,59 @@
     </div>
 
     <table class="tasks">
-        <!--Добавляем каждой задаче новую строчку с названием, категорией и датой-->
-        <?php foreach ($tasks as $task) {
-            // Проверяем, задан ли странице параметр запроса project_id
-            if ($current_project_id) {
-                if ($task['project_id']!==$current_project_id){
+        <?php if (count($tasks) === 0){ ?>
+            <tr>
+                <p><?='Нет таких задач'; ?></p>
+            </tr>
+        <?php } else {
+        //Добавляем каждой задаче новую строчку с названием, категорией и датой-->
+            foreach ($tasks as $task) {
+                // Проверяем, задан ли странице параметр запроса project_id
+                if ($current_project_id) {
+                    if ($task['project_id']!==$current_project_id){
+                        continue;
+                    }
+                }
+                // если задача выполнена и $show_complete_tasks=0, пропускаем итерацию и не выводим задачу
+                if ($task['task_status']===1 and $show_complete_tasks===0) {
                     continue;
                 }
-            }
-            // если задача выполнена и $show_complete_tasks=0, пропускаем итерацию и не выводим задачу
-            if ($task['task_status']===1 and $show_complete_tasks===0) {
-                continue;
-            }
 
-            if (is_task_important($task['task_date'])) {
-                if ($task['task_status'] === 1) {
-                    $classname = ' task--completed';
-                } else {
-                    $classname = ' task--important';
+                if (is_task_important($task['task_date'])) {
+                    if ($task['task_status'] === 1) {
+                        $classname = ' task--completed';
+                    } else {
+                        $classname = ' task--important';
+                    }
                 }
-            }
-            else {
-                $classname = '';
-            } ?>
+                else {
+                    $classname = '';
+                } ?>
 
-            <tr class="tasks__item task <?=$classname;?>">
-                <td class="task__select">
-                    <label class="checkbox task__checkbox">
-                        <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
-                        <span class="checkbox__text"><?=htmlspecialchars($task['task_name']); ?></span>
-                    </label>
-                </td>
-                <!-- Вывод подгружаемого файла в таблицу -->
-                <td class="task__file">
-                    <?php if ($task['path']): ?>
-                        <a class="download-link" href="uploads/<?=$task['path']; ?>"><?=htmlspecialchars($task['path']); ?></a>
-                    <?php endif; ?>
-                </td>
-                <!-- Вывод категории в таблицу -->
-                <td>
-                    <span><?=htmlspecialchars($task['project_name']); ?></span>
-                </td>
-                <!-- Вывод даты в таблицу -->
-                <td class="task__date">
-                <span><?php if ($task['task_date']) {
-                        echo htmlspecialchars($task['task_date']); } ?></span>
-                </td>
-            </tr>
-        <?php } //endforeach; ?>
+                <tr class="tasks__item task <?=$classname;?>">
+                    <td class="task__select">
+                        <label class="checkbox task__checkbox">
+                            <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
+                            <span class="checkbox__text"><?=htmlspecialchars($task['task_name']); ?></span>
+                        </label>
+                    </td>
+                    <!-- Вывод подгружаемого файла в таблицу -->
+                    <td class="task__file">
+                        <?php if ($task['path']): ?>
+                            <a class="download-link" href="uploads/<?=$task['path']; ?>"><?=htmlspecialchars($task['path']); ?></a>
+                        <?php endif; ?>
+                    </td>
+                    <!-- Вывод категории в таблицу -->
+                    <td>
+                        <span><?=htmlspecialchars($task['project_name']); ?></span>
+                    </td>
+                    <!-- Вывод даты в таблицу -->
+                    <td class="task__date">
+                        <span><?php if ($task['task_date']) {
+                            echo htmlspecialchars($task['task_date']); } ?></span>
+                    </td>
+                </tr>
+            <?php }
+        } ?>
     </table>
 </main>
