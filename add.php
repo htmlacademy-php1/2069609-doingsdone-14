@@ -1,9 +1,9 @@
 <?php
 
-require_once('helpers.php');
-require_once('init.php');
+require_once 'helpers.php';
+require_once 'init.php';
 
-require('session_init.php');
+require_once 'session_init.php';
 
 if ($is_auth == 1) {
     $current_user_id = $_SESSION['user']['id'];
@@ -66,7 +66,6 @@ else {
                     }
                     return null;
                 }
-                //добавила недавно
                 return null;
             }
         ];

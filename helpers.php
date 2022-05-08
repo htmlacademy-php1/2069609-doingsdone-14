@@ -151,6 +151,10 @@ function validate_project($id, $allowed_list) {
     return null;
 }
 
+function validate_name_project($name, $allowed_list) {
+    return(in_array($name, $allowed_list));
+}
+
 function count_of_tasks($array_of_task, $id_of_category) {
     $count_of_task = 0;
     foreach ($array_of_task as $task){

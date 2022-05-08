@@ -1,6 +1,7 @@
 <?php
 
-$sql = 'SELECT t.name as task_name, p.name as project_name, p.id as project_id, t.due_date as task_date, t.status as task_status, t.link_to_file as path ' .
+$sql = 'SELECT t.name as task_name, p.name as project_name, p.id as project_id, t.due_date as task_date, ' .
+    't.status as task_status, t.link_to_file as path, t.id as task_id ' .
        'FROM tasks as t ' .
        'JOIN projects as p '.
        'ON t.project_id = p.id '.
@@ -14,7 +15,8 @@ if ($result) {
         'tasks' => $tasks,
         'projects' => $projects,
         'show_complete_tasks' => $show_complete_tasks,
-        'current_project_id' => $current_project_id
+        'current_project_id' => $current_project_id,
+        'tasks_section' =>$tasks_section
     ]);
 } else {
     $error = mysqli_error($link);
