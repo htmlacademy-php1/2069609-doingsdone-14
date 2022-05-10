@@ -53,7 +53,10 @@ else {
         $errors = [];
         $rules = [
             'project_id' => function ($value) use ($projects_ids) {
-                return validate_project($value, $projects_ids);
+                if (!validate_project($value, $projects_ids)) {
+                    return 'Указана несуществующая категория';
+                }
+                return null;
             },
             'due_date' => function($value) {
                 if ($value) {
@@ -121,6 +124,7 @@ else {
             $res = mysqli_stmt_execute($stmt);
             if ($res) {
                 header("Location: index.php");
+                exit();
             }
         }
     }

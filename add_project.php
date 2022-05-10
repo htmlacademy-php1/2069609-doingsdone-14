@@ -45,13 +45,12 @@ else {
         'projects' => $projects
     ]);
 
-    $error_name = null;
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $project['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
         $errors = function ($value) use ($project_names) {
             if (empty($value)) {
                 return 'Заполните поле Название';
-            } else if (validate_name_project($value, $project_names)) {
+            } else if (validate_project($value, $project_names)) {
                 return 'Проект с таким названием уже существует';
             } else if (!is_validate_length($value, MAXIMUM_LENGTH)) {
                 return 'Название должно быть менее 255 символов';
@@ -59,8 +58,9 @@ else {
                 return null;
             }
         };
-        if ($errors($project['name']) !== null) {
-            $error_name = $errors($project['name']);
+        $project = $project['name'];
+        if ($errors($project) !== null) {
+            $error_name = $errors($project);
             $content = include_template('form_project.php', [
                 'tasks' => $tasks,
                 'error' => $error_name,
@@ -72,15 +72,14 @@ else {
             $res = mysqli_stmt_execute($stmt);
             if ($res) {
                 header("Location: index.php");
+                exit();
             }
         }
     }
     else {
         $content = include_template('form_project.php', [
             'projects' => $projects,
-            'tasks' => $tasks,
-            'error' => $error_name
-
+            'tasks' => $tasks
         ]);
     }
 }

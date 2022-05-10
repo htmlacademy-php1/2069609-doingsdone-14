@@ -21,14 +21,14 @@
     <form class="form"  action="" method="post" autocomplete="off">
         <div class="form__row">
             <label class="form__label" for="project_name">Название <sup>*</sup></label>
-            <?php $classname = ($error!==null) ? "form__input--error" : ""; ?>
+            <?php $classname = isset($error) ? "form__input--error" : ""; ?>
             <input class="form__input <?= $classname; ?>" type="text" name="name" id="project_name" value="<?= filter_input(INPUT_POST, 'name'); ?>" placeholder="Введите название проекта">
-            <?php if ($error!==null): ?>
+            <?php if (isset($error)): ?>
                 <p class="form__message"><?=$error; ?></p>
             <?php endif; ?>
         </div>
 
-        <?php if ($error!==null): ?>
+        <?php if (isset($error)): ?>
             <div class="form__message">
                 <p>Пожалуйста, исправьте ошибку в форме</p>
             </div>

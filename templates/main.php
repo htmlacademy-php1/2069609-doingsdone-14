@@ -75,11 +75,12 @@
                     continue;
                 }
 
+                $classname = '';
                 if (is_task_important($task['task_date'])) {
                     $classname = ' task--important';
                 }
                 if ($task['task_status'] === 1) {
-                        $classname = ' task--completed';
+                    $classname = ' task--completed';
                 }
                 ?>
 

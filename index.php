@@ -57,11 +57,11 @@ else {
 
         $what_tasks_section_show = '';
 
-        if ($current_deadline == 'yesterday') {
+        if ($current_deadline === 'yesterday') {
             $what_tasks_section_show = 'AND t.due_date < CURDATE()';
-        } else if ($current_deadline == 'today') {
+        } else if ($current_deadline === 'today') {
             $what_tasks_section_show = 'AND t.due_date = CURDATE()';
-        } else if ($current_deadline == 'tomorrow') {
+        } else if ($current_deadline === 'tomorrow') {
             $what_tasks_section_show = 'AND t.due_date = DATE_ADD(CURDATE(), INTERVAL 1 DAY)';
         }
 
@@ -119,6 +119,7 @@ else {
                 require_once 'search.php';
            } else {
                header("Location: index.php");
+               exit();
            }
         }
 
@@ -127,6 +128,7 @@ else {
 
             if ($result = mysqli_query($link, $sql)) {
                 header("Location: index.php");
+                exit();
             }
 
         }
