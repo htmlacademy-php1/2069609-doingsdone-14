@@ -144,11 +144,8 @@ function include_template($name, array $data = []) {
     return $result;
 }
 
-function validate_project($id, $allowed_list) {
-    if (!in_array($id, $allowed_list)) {
-        return "Указана несуществующая категория";
-    }
-    return null;
+function validate_project($name, $allowed_list) {
+    return(in_array($name, $allowed_list));
 }
 
 function count_of_tasks($array_of_task, $id_of_category) {

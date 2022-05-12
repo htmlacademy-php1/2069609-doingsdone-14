@@ -1,9 +1,9 @@
 <?php
 
-require_once('helpers.php');
-require_once('init.php');
+require_once 'helpers.php';
+require_once 'init.php';
 
-require('session_init.php');
+require_once 'session_init.php';
 
 if ($is_auth == 1) {
     $current_user_id = $_SESSION['user']['id'];
@@ -53,7 +53,10 @@ else {
         $errors = [];
         $rules = [
             'project_id' => function ($value) use ($projects_ids) {
-                return validate_project($value, $projects_ids);
+                if (!validate_project($value, $projects_ids)) {
+                    return 'Указана несуществующая категория';
+                }
+                return null;
             },
             'due_date' => function($value) {
                 if ($value) {
@@ -66,7 +69,6 @@ else {
                     }
                     return null;
                 }
-                //добавила недавно
                 return null;
             }
         ];
@@ -122,6 +124,7 @@ else {
             $res = mysqli_stmt_execute($stmt);
             if ($res) {
                 header("Location: index.php");
+                exit();
             }
         }
     }
