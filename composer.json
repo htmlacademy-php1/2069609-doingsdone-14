@@ -1,0 +1,16 @@
+{
+    "name": "delta/doingsdone",
+    "description": "Website for convenient to-do list management",
+    "type": "project",
+    "license": "MIT",
+
+    "authors": [
+        {
+            "name": "Anna Delyan",
+            "email": "anna_delyan@mail.ru"
+        }
+    ],
+    "require": {
+        "symfony/mailer": "^6.0"
+    }
+}

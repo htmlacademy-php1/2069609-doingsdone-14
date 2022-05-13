@@ -10,35 +10,43 @@
         <form class="form" action="" method="post" autocomplete="off">
 
             <div class="form__row">
-                <?php $classname = isset($errors['email']) ? "form__input--error" : ""; ?>
+                <?php
+                $classname = isset($errors['email']) ? "form__input--error" : ""; ?>
                 <label class="form__label" for="email">E-mail <sup>*</sup></label>
-                <input class="form__input <?=$classname;?>" type="text" name="email" id="email"
-                       value="<?=filter_input(INPUT_POST, 'email'); ?>" placeholder="Введите e-mail">
-                <?php if (isset($errors['email'])): ?>
+                <input class="form__input <?= $classname; ?>" type="text" name="email" id="email"
+                       value="<?= filter_input(INPUT_POST, 'email'); ?>" placeholder="Введите e-mail">
+                <?php
+                if (isset($errors['email'])): ?>
                     <div class="error-notice">
                         <span class="error-notice__icon"></span>
-                        <span class="form__message"><?=$errors['email'];?></span>
+                        <span class="form__message"><?= $errors['email']; ?></span>
                     </div>
-                <?php endif; ?>
+                <?php
+                endif; ?>
             </div>
 
             <div class="form__row">
-                <?php $classname = isset($errors['password']) ? "form__input--error" : "";?>
+                <?php
+                $classname = isset($errors['password']) ? "form__input--error" : ""; ?>
                 <label class="form__label" for="password">Пароль <sup>*</sup></label>
-                <input class="form__input <?=$classname;?>" type="password" name="password" id="password"
-                       value="<?=filter_input(INPUT_POST, 'password'); ?>" placeholder="Введите пароль">
-                <?php if (isset($errors['password'])): ?>
+                <input class="form__input <?= $classname; ?>" type="password" name="password" id="password"
+                       value="<?= filter_input(INPUT_POST, 'password'); ?>" placeholder="Введите пароль">
+                <?php
+                if (isset($errors['password'])): ?>
                     <div class="error-notice">
                         <span class="error-notice__icon"></span>
-                        <span class="form__message"><?=$errors['password'];?></span>
+                        <span class="form__message"><?= $errors['password']; ?></span>
                     </div>
-                <?php endif; ?>
+                <?php
+                endif; ?>
             </div>
 
             <div class="form__row form__row--controls">
-                <?php if (isset($errors)): ?>
+                <?php
+                if (isset($errors)): ?>
                     <p class="error-message">Пожалуйста, исправьте ошибки в форме</p>
-                <?php endif; ?>
+                <?php
+                endif; ?>
             </div>
 
             <div>

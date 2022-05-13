@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 
 define('CACHE_DIR', basename(__DIR__ . DIRECTORY_SEPARATOR . 'cache'));
@@ -14,4 +15,4 @@ $projects = [];
 $tasks = [];
 $content = '';
 define('SECONDS_IN_DAY', 86400);
-define('MAXIMUM_LENGTH',255);
+define('MAXIMUM_LENGTH', 255);

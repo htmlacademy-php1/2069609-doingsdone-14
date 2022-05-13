@@ -2,13 +2,11 @@
 
 require_once 'helpers.php';
 require_once 'init.php';
-
 require_once 'session_init.php';
 
 if ($is_auth == 1) {
     $current_user_id = $_SESSION['user']['id'];
-}
-else {
+} else {
     header("Location: auth.php");
     exit();
 }
@@ -16,32 +14,19 @@ else {
 if (!$link) {
     $error = mysqli_connect_error();
     $content = include_template('error.php', ['error' => $error]);
-}
-else {
-    require ('list_of_projects.php');
+} else {
+    require_once 'list_of_projects.php';
     $projects_ids = [];
 
     if ($list_of_projects) {
         $projects = mysqli_fetch_all($list_of_projects, MYSQLI_ASSOC);
         $projects_ids = array_column($projects, 'id');
-    }
-    else {
+    } else {
         $error = mysqli_connect_error();
         $content = include_template('error.php', ['error' => $error]);
     }
 
-    $sql = 'SELECT * FROM tasks WHERE user_id = ?';
-    $stmt = db_get_prepare_stmt($link, $sql, [$current_user_id]);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-
-    if ($result) {
-        $tasks = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    }
-    else {
-        $error = mysqli_connect_error();
-        $content = include_template('error.php', ['error' => $error]);
-    }
+    require_once 'list_of_tasks.php';
 
     $content = include_template('form_task.php', [
         'tasks' => $tasks,
@@ -58,9 +43,8 @@ else {
                 }
                 return null;
             },
-            'due_date' => function($value) {
+            'due_date' => function ($value) {
                 if ($value) {
-                    // потом попробовать поменять местами, посмотреть что будет
                     if (!is_date_greater_than_today($value)) {
                         return "Дата должна быть больше или равна текущей";
                     }
@@ -73,10 +57,13 @@ else {
             }
         ];
 
-        $task = filter_input_array(INPUT_POST, [
-            'name' => FILTER_DEFAULT,
-            'project_id' => FILTER_DEFAULT,
-            'due_date' => FILTER_DEFAULT],
+        $task = filter_input_array(
+            INPUT_POST,
+            [
+                'name' => FILTER_DEFAULT,
+                'project_id' => FILTER_DEFAULT,
+                'due_date' => FILTER_DEFAULT
+            ],
             true
         );
 
@@ -85,15 +72,7 @@ else {
         }
 
         foreach ($task as $key => $value) {
-            if (in_array($key, $required) && empty($value)) {
-                $errors[$key] = "Поле $key надо заполнить";
-            }
-            else {
-                if (isset($rules[$key])) {
-                    $rule = $rules[$key];
-                    $errors[$key] = $rule($value);
-                }
-            }
+            require 'find_errors.php';
         }
         $errors = array_filter($errors);
 
@@ -105,8 +84,7 @@ else {
             $filename = uniqid() . ".$file_type";
             move_uploaded_file($tmp_name, 'uploads/' . $filename);
             $task['link_to_file'] = $filename;
-        }
-        else {
+        } else {
             $task['link_to_file'] = null;
         }
 
@@ -116,19 +94,21 @@ else {
                 'errors' => $errors,
                 'projects' => $projects
             ]);
-        }
-        else {
+        } else {
             $sql = 'INSERT INTO tasks (date_of_create, name, link_to_file, due_date, user_id, project_id)' .
                 ' VALUES (NOW(), ?, ?, ?, ?, ?)';
-            $stmt = db_get_prepare_stmt($link, $sql, [$task['name'], $task['link_to_file'], $task['due_date'], $current_user_id, $task['project_id']]);
+            $stmt = db_get_prepare_stmt(
+                $link,
+                $sql,
+                [$task['name'], $task['link_to_file'], $task['due_date'], $current_user_id, $task['project_id']]
+            );
             $res = mysqli_stmt_execute($stmt);
             if ($res) {
                 header("Location: index.php");
                 exit();
             }
         }
-    }
-    else {
+    } else {
         $content = include_template('form_task.php', [
             'projects' => $projects,
             'tasks' => $tasks
@@ -136,9 +116,9 @@ else {
     }
 }
 
-$layout_content = include_template('layout.php',[
+$layout_content = include_template('layout.php', [
     'content' => $content,
-    'title'=> 'Дела в порядке',
+    'title' => 'Дела в порядке',
     'is_auth' => $is_auth,
     'current_user_name' => $current_user_name
 ]);

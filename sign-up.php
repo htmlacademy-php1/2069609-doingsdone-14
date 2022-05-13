@@ -1,14 +1,14 @@
 <?php
 
-require_once('init.php');
-require_once('helpers.php');
+require_once 'init.php';
+require_once 'helpers.php';
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $form = $_POST;
     $required = ['name', 'email', 'password'];
     $rules = [
-        'email' => function($value) {
+        'email' => function ($value) {
             if ($value) {
                 if (!is_validate_length($value, MAXIMUM_LENGTH)) {
                     return "Длина не более 255 символов";
@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             return null;
         },
-        'name' => function($value) {
+        'name' => function ($value) {
             if (!is_validate_length($value, MAXIMUM_LENGTH)) {
                 return "Длина не более 255 символов";
             }
@@ -28,22 +28,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     ];
 
-    $form = filter_input_array(INPUT_POST, [
-        'name' => FILTER_DEFAULT,
-        'email' => FILTER_DEFAULT,
-        'password' => FILTER_DEFAULT],
+    $form = filter_input_array(
+        INPUT_POST,
+        [
+            'name' => FILTER_DEFAULT,
+            'email' => FILTER_DEFAULT,
+            'password' => FILTER_DEFAULT
+        ],
         true
     );
 
     foreach ($form as $key => $value) {
-        if (in_array($key, $required) && empty($value)) {
-            $errors[$key] = "Поле $key надо заполнить";
-        } else {
-            if (isset($rules[$key])) {
-                $rule = $rules[$key];
-                $errors[$key] = $rule($value);
-            }
-        }
+        require 'find_errors.php';
     }
     $errors = array_filter($errors);
 
@@ -55,8 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $res = mysqli_stmt_get_result($stmt);
         if (mysqli_num_rows($res) > 0) {
             $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
-        }
-        else {
+        } else {
             $password = password_hash($form['password'], PASSWORD_DEFAULT);
 
             $sql = 'INSERT INTO users (dt_add, email, name, password) VALUES (NOW(), ?, ?, ?)';
@@ -70,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$content = include_template('register.php', ['errors'=>$errors]);
+$content = include_template('register.php', ['errors' => $errors]);
 require('session_init.php');
 
 $layout_content = include_template('layout.php', [
