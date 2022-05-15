@@ -45,7 +45,7 @@
                 foreach ($projects as $project): ?>
                     <option value="<?= $project['id'] ?>"
                         <?php
-                        if ($project['id'] == filter_input(INPUT_POST, 'project_id')): ?>
+                        if ($project['id'] === filter_input(INPUT_POST, 'project_id')): ?>
                             selected
                         <?php
                         endif; ?>><?= $project['name'] ?>

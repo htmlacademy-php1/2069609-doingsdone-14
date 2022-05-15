@@ -10,14 +10,14 @@
 </head>
 
 <body <?php
-if ($is_auth == 0) {
+if ($is_auth === 0) {
     echo ' class = "body-background"';
 } ?>>
 <h1 class="visually-hidden">Дела в порядке</h1>
 
 <div class="page-wrapper">
     <div class="container <?php
-    if ($is_auth == 1) {
+    if ($is_auth === 1) {
         echo ' class = "container--with-sidebar"';
     } ?>">
         <header class="main-header">
@@ -27,7 +27,7 @@ if ($is_auth == 0) {
 
             <div class="main-header__side">
                 <?php
-                if ($is_auth == 1): ?>
+                if ($is_auth === 1): ?>
                     <a class="main-header__side-item button button--plus open-modal" href="add.php">
                         Добавить задачу
                     </a>
@@ -38,13 +38,13 @@ if ($is_auth == 0) {
 
                     <div class="user-menu__data">
                         <?php
-                        if ($is_auth == 1): ?>
+                        if ($is_auth === 1): ?>
                             <a href="logout.php">Выйти</a>
                             <p><?= $current_user_name; ?></p>
                         <?php
                         endif; ?>
                         <?php
-                        if ($is_auth == 0): ?>
+                        if ($is_auth === 0): ?>
                             <section class="content__side">
                                 <a class="button button--transparent content__side-button" href="auth.php">
                                     Войти
@@ -73,7 +73,7 @@ if ($is_auth == 0) {
         </div>
 
         <?php
-        if ($is_auth == 1): ?>
+        if ($is_auth === 1): ?>
             <a class="main-footer__button button button--plus" href="add.php">Добавить задачу</a>
         <?php
         endif; ?>
