@@ -14,7 +14,8 @@
  *
  * @return bool true при совпадении с форматом 'ГГГГ-ММ-ДД', иначе false
  */
-function is_date_valid(string $date) : bool {
+function is_date_valid(string $date): bool
+{
     $format_to_check = 'Y-m-d';
     $dateTimeObj = date_create_from_format($format_to_check, $date);
 
@@ -30,7 +31,8 @@ function is_date_valid(string $date) : bool {
  *
  * @return mysqli_stmt Подготовленное выражение
  */
-function db_get_prepare_stmt($link, $sql, $data = []) {
+function db_get_prepare_stmt($link, $sql, $data = [])
+{
     $stmt = mysqli_prepare($link, $sql);
 
     if ($stmt === false) {
@@ -47,12 +49,14 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
 
             if (is_int($value)) {
                 $type = 'i';
-            }
-            else if (is_string($value)) {
-                $type = 's';
-            }
-            else if (is_double($value)) {
-                $type = 'd';
+            } else {
+                if (is_string($value)) {
+                    $type = 's';
+                } else {
+                    if (is_double($value)) {
+                        $type = 'd';
+                    }
+                }
             }
 
             if ($type) {
@@ -97,9 +101,9 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
  *
  * @return string Рассчитанная форма множественнго числа
  */
-function get_noun_plural_form (int $number, string $one, string $two, string $many): string
+function get_noun_plural_form(int $number, string $one, string $two, string $many): string
 {
-    $number = (int) $number;
+    $number = (int)$number;
     $mod10 = $number % 10;
     $mod100 = $number % 100;
 
@@ -127,7 +131,8 @@ function get_noun_plural_form (int $number, string $one, string $two, string $ma
  * @param array $data Ассоциативный массив с данными для шаблона
  * @return string Итоговый HTML
  */
-function include_template($name, array $data = []) {
+function include_template($name, array $data = [])
+{
     $name = 'templates/' . $name;
     $result = '';
 
@@ -144,26 +149,95 @@ function include_template($name, array $data = []) {
     return $result;
 }
 
-function validate_project($name, $allowed_list) {
-    return(in_array($name, $allowed_list));
+/**
+ * Проверяет, осталось ли от текущего момента до переданной даты менее 24 часов
+ *
+ * Примеры использования для текущей даты 2022-05-12:
+ * is_task_important('2022-05-12'); // true
+ * is_task_important('2022-05-13'); // true
+ * is_task_important('2022-05-11'); // true
+ * is_task_important('2020-01-11'); // true
+ * is_task_important('2022-05-14'); // false
+ *
+ * @param string $task_date Дата в виде строки
+ *
+ * @return bool true если до переданной даты осталось менее 24 часов, иначе false
+ */
+function is_task_important($task_date): bool
+{
+    if ($task_date) {
+        $current_time = time();
+        return (strtotime($task_date) - $current_time < SECONDS_IN_DAY);
+    }
+    return false;
 }
 
-function count_of_tasks($array_of_task, $id_of_category) {
+/**
+ * Проверяет, присутствует ли в переданном массиве переданное значение
+ *
+ * @param string $name Значение в виде строки
+ * @param array $allowed_list Переданный с писок в виде массива
+ *
+ * @return bool true если переданное значение проекта присутствует в переданном массиве, иначе false
+ */
+function validate_project($name, $allowed_list)
+{
+    return (in_array($name, $allowed_list));
+}
+
+/**
+ * Считает колество задач, у которых значение проекта совпадает с заданным значением проекта
+ *
+ * @param array $array_of_task Задачи в виде массива
+ * @param int $id_of_category Значение id текущего проекта в виде числа
+ *
+ * @return int Количество задач в текущем проекте
+ */
+function count_of_tasks($array_of_task, $id_of_category)
+{
     $count_of_task = 0;
-    foreach ($array_of_task as $task){
-        if ($task['project_id']===$id_of_category){
+    foreach ($array_of_task as $task) {
+        if ($task['project_id'] === $id_of_category) {
             $count_of_task++;
         }
     }
     return $count_of_task;
 }
 
-function is_date_greater_than_today($date): bool {
+/**
+ * Проверяет, больше или равна ли переданная дата текущей
+ *
+ * Примеры использования для текущей даты 2022-05-12:
+ * is_date_greater_than_today('2022-05-12'); // true
+ * is_date_greater_than_today('2022-05-13'); // true
+ * is_date_greater_than_today('2022-05-11'); // false
+ * is_date_greater_than_today('2020-01-11'); // false
+ *
+ * @param string $date Дата в виде строки
+ *
+ * @return bool true если до переданная дата больше или равна текущей, иначе false
+ */
+function is_date_greater_than_today($date): bool
+{
     $current_time = time();
     return strtotime($date) + SECONDS_IN_DAY > $current_time;
 }
 
-function is_validate_length($value, $max):bool {
+/**
+ * Проверяет, меньше ли количество символов переданного значения, чем переданное максимально допустимое значение
+ *
+ * Примеры использования:
+ * is_validate_length('Проект', 10); // true
+ * is_validate_length('Проект', 6); // true
+ * is_validate_length('Проект', 3); // false
+ *
+ * @param string $value Значение в виде строки
+ * @param int $max Значение максимально допустимого значения в виде числа
+ *
+ * @return bool true если количество символов переданного значение меньше максимально допустимого значения, иначе false
+ */
+function is_validate_length($value, $max): bool
+{
     $len = mb_strlen($value);
-    return ($len < $max);
+    return ($len <= $max);
 }

@@ -1,14 +1,18 @@
 <?php
-require_once ('helpers.php');
-require_once ('init.php');
+
+require_once 'helpers.php';
+require_once 'init.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $required = ['email', 'password'];
     $errors = [];
 
-    $form = filter_input_array(INPUT_POST, [
-        'email' => FILTER_DEFAULT,
-        'password' => FILTER_DEFAULT],
+    $form = filter_input_array(
+        INPUT_POST,
+        [
+            'email' => FILTER_DEFAULT,
+            'password' => FILTER_DEFAULT
+        ],
         true
     );
 
@@ -33,11 +37,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!empty($errors)) {
         $content = include_template('auth.php', ['form' => $form, 'errors' => $errors]);
-    } else if (empty($errors) and $current_user) {
+    } elseif ($current_user) {
         if (password_verify($form['password'], $current_user['password'])) {
             $_SESSION['user'] = [
-                'id'=>$current_user['id'],
-                'name'=>$current_user['name']
+                'id' => $current_user['id'],
+                'name' => $current_user['name']
             ];
         } else {
             $errors['password'] = 'Неверный пароль';
@@ -48,12 +52,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!count($errors)) {
         header("Location: index.php");
         exit();
-    }
-    else {
+    } else {
         $content = include_template('auth.php', ['form' => $form, 'errors' => $errors]);
     }
-}
-else {
+} else {
     $content = include_template('auth.php');
 
     if (isset($_SESSION['user'])) {
@@ -62,7 +64,7 @@ else {
     }
 }
 
-require('session_init.php');
+require_once 'session_init.php';
 
 $layout_content = include_template('layout.php', [
     'is_auth' => $is_auth,
