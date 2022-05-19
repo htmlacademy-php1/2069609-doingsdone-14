@@ -45,7 +45,7 @@
                 foreach ($projects as $project): ?>
                     <option value="<?= $project['id'] ?>"
                         <?php
-                        if ($project['id'] === filter_input(INPUT_POST, 'project_id')): ?>
+                        if ($project['id'] === (int)filter_input(INPUT_POST, 'project_id')): ?>
                             selected
                         <?php
                         endif; ?>><?= $project['name'] ?>
@@ -76,13 +76,19 @@
 
         <div class="form__row">
             <label class="form__label" for="file">Файл</label>
-
+            <?php
+            $classname = isset($errors['file']) ? "form__input--error" : ""; ?>
             <div class="form__input-file">
-                <input class="visually-hidden" type="file" name="file" id="file"
+                <input class="visually-hidden <?= $classname; ?>" type="file" name="file" id="file"
                        value="<?= filter_input(INPUT_POST, 'link_to_file'); ?>">
                 <label class="button button--transparent" for="file">
                     <span>Выберите файл</span>
                 </label>
+                <?php
+                if (isset($errors['file'])): ?>
+                    <p class="form__message"><?= $errors['file']; ?></p>
+                <?php
+                endif; ?>
             </div>
 
         </div>

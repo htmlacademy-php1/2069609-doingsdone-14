@@ -1,7 +1,7 @@
 <div class="content">
     <section class="content__side">
-        <p class="content__side-info">Если у вас уже есть аккаунт, авторизуйтесь на сайте</p>
-        <a class="button button--transparent content__side-button" href="auth.php">Войти</a>
+        <p class="content__side-info">Если у вас ещё нет аккаунта, зарегистрируйтесь на сайте</p>
+        <a class="button button--transparent content__side-button" href="sign-up.php">Регистрация</a>
     </section>
 
     <main class="content__main">

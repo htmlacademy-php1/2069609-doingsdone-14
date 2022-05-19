@@ -173,16 +173,21 @@ function is_task_important($task_date): bool
 }
 
 /**
- * Проверяет, присутствует ли в переданном массиве переданное значение
+ * Регистронезависимая проверка присутствия переданного значения в переданном массиве
  *
  * @param string $name Значение в виде строки
  * @param array $allowed_list Переданный с писок в виде массива
  *
  * @return bool true если переданное значение проекта присутствует в переданном массиве, иначе false
  */
-function validate_project($name, $allowed_list)
+function validate_project($name, $allowed_list): bool
 {
-    return (in_array($name, $allowed_list));
+    $mb_name = mb_strtolower($name);
+    $length = count($allowed_list);
+    for ($i = 0; $i < $length; $i++) {
+        $allowed_list[$i] = mb_strtolower($allowed_list[$i]);
+    }
+    return (in_array($mb_name, $allowed_list));
 }
 
 /**
