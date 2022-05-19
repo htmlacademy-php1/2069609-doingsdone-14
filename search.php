@@ -10,13 +10,21 @@ $stmt = db_get_prepare_stmt($link, $sql, [$search, $current_user_id]);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 if ($result) {
-    $tasks = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $tasks_search = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    if (count($tasks_search) === 0) {
+        $error_no_tasks = 'Задач не найдено';
+    }
+
     $content = include_template('main.php', [
-        'tasks' => $tasks,
+        'tasks' => $tasks_search,
+        'tasks_for_counting' => $user_tasks,
         'projects' => $projects,
         'show_complete_tasks' => $show_complete_tasks,
         'current_project_id' => $current_project_id,
-        'tasks_section' => $tasks_section
+        'tasks_section' => $tasks_section,
+        'current_deadline' => $current_deadline,
+        'content_error_404' => $content_error_404,
+        'error_no_tasks' => $error_no_tasks
     ]);
 } else {
     $error = mysqli_error($link);

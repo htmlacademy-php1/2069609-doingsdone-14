@@ -2,7 +2,9 @@
 
 require_once 'init.php';
 require_once 'helpers.php';
+
 $errors = [];
+$form = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $form = $_POST;
@@ -44,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = array_filter($errors);
 
     if (empty($errors)) {
-        $email = mysqli_real_escape_string($link, $form['email']);
+        $email = $form['email'];
         $sql = 'SELECT id FROM users WHERE email = ?';
         $stmt = db_get_prepare_stmt($link, $sql, [$email]);
         mysqli_stmt_execute($stmt);
@@ -65,8 +67,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$content = include_template('register.php', ['errors' => $errors]);
-require('session_init.php');
+$content = include_template('register.php', [
+    'errors' => $errors,
+    'form' => $form
+]);
+require 'session_init.php';
 
 $layout_content = include_template('layout.php', [
     'content' => $content,

@@ -11,10 +11,7 @@ if ($is_auth === 1) {
     exit();
 }
 
-if (!$link) {
-    $error = mysqli_connect_error();
-    $content = include_template('error.php', ['error' => $error]);
-} else {
+if ($link) {
     require_once 'list_of_projects.php';
     $projects_ids = [];
 
@@ -36,6 +33,7 @@ if (!$link) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $required = ['name', 'project_id'];
         $errors = [];
+        $error_file = '';
         $rules = [
             'project_id' => function ($value) use ($projects_ids) {
                 if (!validate_project($value, $projects_ids)) {
@@ -52,6 +50,16 @@ if (!$link) {
                         return "Введите дату в формате ГГГГ-ММ-ДД";
                     }
                     return null;
+                }
+                return null;
+            },
+            'name' => function ($value) {
+                if (!is_validate_length($value, MAXIMUM_LENGTH)) {
+                    return 'Название должно быть не более 255 символов';
+                }
+                $value = trim($value);
+                if (empty($value)) {
+                    return 'Название не может состоять из одних пробелов';
                 }
                 return null;
             }
@@ -79,11 +87,14 @@ if (!$link) {
         if (!empty($_FILES['file']['name'])) {
             $tmp_name = $_FILES['file']['tmp_name'];
             $link_to_file = $_FILES['file']['name'];
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $file_type = finfo_file($finfo, $tmp_name);
+            $file_type = pathinfo($link_to_file, PATHINFO_EXTENSION);
             $filename = uniqid() . ".$file_type";
-            move_uploaded_file($tmp_name, 'uploads/' . $filename);
-            $task['link_to_file'] = $filename;
+            $result = move_uploaded_file($tmp_name, 'uploads/' . $filename);
+            if ($result) {
+                $task['link_to_file'] = $filename;
+            } else {
+                $errors['file'] = 'Не удалось загрузить файл';
+            }
         } else {
             $task['link_to_file'] = null;
         }

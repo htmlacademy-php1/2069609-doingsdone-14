@@ -11,10 +11,7 @@ if ($is_auth === 1) {
     exit();
 }
 
-if (!$link) {
-    $error = mysqli_connect_error();
-    $content = include_template('error.php', ['error' => $error]);
-} else {
+if ($link) {
     require_once 'list_of_projects.php';
     $project_names = [];
     if ($list_of_projects) {
@@ -33,7 +30,7 @@ if (!$link) {
     ]);
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $project['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
+        $project['name'] = filter_input(INPUT_POST, 'name');
         $errors = function ($value) use ($project_names) {
             if (empty($value)) {
                 return 'Заполните поле Название';

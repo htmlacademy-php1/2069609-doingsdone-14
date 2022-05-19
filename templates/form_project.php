@@ -7,7 +7,7 @@
             foreach ($projects as $project): ?>
                 <li class="main-navigation__list-item">
                     <a class="main-navigation__list-item-link"
-                       href="index.php?project_id=<?= $project['id'] ?>"><?= $project['name'] ?></a>
+                       href="index.php?project_id=<?= $project['id']  /* ЗАДУМАТЬСЯ!! */ ?>"><?= htmlspecialchars($project['name']) ?></a>
                     <span class="main-navigation__list-item-count"><?= count_of_tasks($tasks, $project['id']) ?></span>
                 </li>
             <?php

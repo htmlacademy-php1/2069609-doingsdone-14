@@ -5,18 +5,18 @@
             <!-- Добавляем название задач в таблицу -->
             <?php
             foreach ($projects as $project): ?>
-                <li class="main-navigation__list-item">
+                <li class="main-navigation__list-item"
                     <!-- Выделяем текущий проект с помощью доп. класса -->
                     <a class="main-navigation__list-item-link
                         <?php
                     if ($project['id'] === $current_project_id) {
                         echo ' main-navigation__list-item--active';
-                    } ?>" href="index.php?project_id=<?= $project['id'] ?>">
+                    } ?>" href="index.php?project_id=<?= $project['id'] ?>&show_completed=<?= $show_complete_tasks; ?>&deadline=<?= $current_deadline; ?> ">
                         <?= htmlspecialchars($project['name']) ?>
                     </a>
                     <!-- Выводим количество с помощью функции-->
                     <span class="main-navigation__list-item-count">
-                        <?= count_of_tasks($tasks, $project['id']) ?>
+                        <?= count_of_tasks($tasks_for_counting, $project['id']) ?>
                     </span>
                 </li>
             <?php
@@ -29,7 +29,14 @@
     </a>
 </section>
 
+
+
 <main class="content__main">
+    <?php if(!empty($content_error_404)): ?>
+        <p>
+            <?= $content_error_404; ?>
+        </p>
+    <?php else: ?>
     <h2 class="content__main-heading">Список задач</h2>
 
     <form class="search-form" action="index.php" method="GET" autocomplete="off">
@@ -39,11 +46,12 @@
         <input class="search-form__submit" type="submit" name="" value="Искать">
     </form>
 
+
     <div class="tasks-controls">
         <nav class="tasks-switch">
             <?php
             foreach ($tasks_section as $task_section): ?>
-                <a href="index.php?deadline=<?= $task_section['deadline']; ?>" class="tasks-switch__item
+                <a href="index.php?project_id=<?= $current_project_id; ?>&show_completed=<?= $show_complete_tasks; ?>&deadline=<?= $task_section['deadline']; ?>" class="tasks-switch__item
                 <?php
                 if ($task_section['deadline'] === $current_deadline): echo ' tasks-switch__item--active'; endif; ?>">
                     <?= $task_section['name']; ?>
@@ -57,17 +65,17 @@
             <input class="checkbox__input visually-hidden show_completed"
                    type="checkbox" <?php
                    if ($show_complete_tasks === 1): ?>checked<?php
-            endif; ?>>
+            endif; ?> >
             <span class="checkbox__text">Показывать выполненные</span>
         </label>
     </div>
 
     <table class="tasks">
         <?php
-        if (count($tasks) === 0) { ?>
+        if (!empty($error_no_tasks)) { ?>
             <tr>
                 <p>
-                    <?= 'Задачи отсутствуют'; ?>
+                    <?= $error_no_tasks; ?>
                 </p>
             </tr>
             <?php
@@ -133,3 +141,4 @@
         } ?>
     </table>
 </main>
+<?php endif; ?>

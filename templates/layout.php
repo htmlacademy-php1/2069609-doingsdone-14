@@ -40,7 +40,7 @@ if ($is_auth === 0) {
                         <?php
                         if ($is_auth === 1): ?>
                             <a href="logout.php">Выйти</a>
-                            <p><?= $current_user_name; ?></p>
+                            <p><?= htmlspecialchars($current_user_name); ?></p>
                         <?php
                         endif; ?>
                         <?php
