@@ -42,7 +42,7 @@
                 $classname = isset($errors['name']) ? "form__input--error" : ""; ?>
                 <label class="form__label" for="name">Имя <sup>*</sup></label>
                 <input class="form__input <?= $classname; ?>" type="text" name="name" id="name"
-                        value="<?= filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS); ?>"
+                       value="<?= filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS); ?>"
                        placeholder="Введите имя">
                 <?php
                 if (isset($errors['name'])): ?>

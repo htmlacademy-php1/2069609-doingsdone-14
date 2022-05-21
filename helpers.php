@@ -246,3 +246,40 @@ function is_validate_length($value, $max): bool
     $len = mb_strlen($value);
     return ($len <= $max);
 }
+
+/**
+ * Определяет значение переменной error_no_tasks
+ *
+ * @param int $current_project_id Значение id текущего проекта в виде числа
+ * @param array $tasks Выводимые (в зависимости от выбранного проекта/дедлайна) задачи в виде массива
+ * @param string $current_project_id_without_filter Значение id текущего проекта, без фильтра FILTER_SANITIZE_NUMBER_INT
+ * @param array $user_tasks Все задачи пользователя в виде массива
+ * @param array $user_project_ids Значения всех id проектов пользователя в виде массива
+ *
+ * @return string если количество выводимых задач равно 0, возвращаем 'Нет задач', иначе пустую строку ''
+ */
+function what_is_error_no_tasks(
+    $current_project_id,
+    $tasks,
+    $current_project_id_without_filter,
+    $user_tasks,
+    $user_project_ids
+): string {
+    $error_no_tasks = '';
+    if ($current_project_id === 0 and count($tasks) === 0) {
+        $error_no_tasks = 'Нет задач';
+    }
+    if (!$current_project_id_without_filter and count($user_tasks) === 0) {
+        $error_no_tasks = 'Нет задач';
+    }
+    if ($current_project_id_without_filter) {
+        if (in_array($current_project_id, $user_project_ids)) {
+            if (count_of_tasks($tasks, $current_project_id) === 0) {
+                $error_no_tasks = 'Нет задач';
+            }
+        } else {
+            $error_no_tasks = 'Вы обращаетесь к несуществующему проекту';
+        }
+    }
+    return $error_no_tasks;
+}

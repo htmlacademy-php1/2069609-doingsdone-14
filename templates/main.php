@@ -1,42 +1,22 @@
-<section class="content__side">
-    <h2 class="content__side-heading">Проекты</h2>
-    <nav class="main-navigation">
-        <ul class="main-navigation__list">
-            <!-- Добавляем название задач в таблицу -->
-            <?php
-            foreach ($projects as $project): ?>
-                <li class="main-navigation__list-item"
-                    <!-- Выделяем текущий проект с помощью доп. класса -->
-                    <a class="main-navigation__list-item-link
-                        <?php
-                    if ($project['id'] === $current_project_id) {
-                        echo ' main-navigation__list-item--active';
-                    } ?>" href="index.php?project_id=<?= $project['id'] ?>&show_completed=<?= $show_complete_tasks; ?>&deadline=<?= $current_deadline; ?> ">
-                        <?= htmlspecialchars($project['name']) ?>
-                    </a>
-                    <!-- Выводим количество с помощью функции-->
-                    <span class="main-navigation__list-item-count">
-                        <?= count_of_tasks($tasks_for_counting, $project['id']) ?>
-                    </span>
-                </li>
-            <?php
-            endforeach; ?>
-        </ul>
-    </nav>
+<?php
 
-    <a class="button button--transparent button--plus content__side-button" href="add_project.php"
-       target="project_add">Добавить проект
-    </a>
-</section>
-
-
+$projects_list = include_template('projects_list.php', [
+    'projects' => $projects,
+    'current_project_id' => $current_project_id,
+    'show_complete_tasks' => $show_complete_tasks,
+    'current_deadline' => $current_deadline,
+    'tasks_for_counting' => $tasks_for_counting
+]);
+print ($projects_list) ?>
 
 <main class="content__main">
-    <?php if(!empty($content_error_404)): ?>
+    <?php
+    if (!empty($content_error_404)): ?>
         <p>
             <?= $content_error_404; ?>
         </p>
-    <?php else: ?>
+    <?php
+    else: ?>
     <h2 class="content__main-heading">Список задач</h2>
 
     <form class="search-form" action="index.php" method="GET" autocomplete="off">
@@ -51,7 +31,8 @@
         <nav class="tasks-switch">
             <?php
             foreach ($tasks_section as $task_section): ?>
-                <a href="index.php?project_id=<?= $current_project_id; ?>&show_completed=<?= $show_complete_tasks; ?>&deadline=<?= $task_section['deadline']; ?>" class="tasks-switch__item
+                <a href="index.php?project_id=<?= $current_project_id; ?>&show_completed=<?= $show_complete_tasks; ?>
+                &deadline=<?= $task_section['deadline']; ?>" class="tasks-switch__item
                 <?php
                 if ($task_section['deadline'] === $current_deadline): echo ' tasks-switch__item--active'; endif; ?>">
                     <?= $task_section['name']; ?>
@@ -141,4 +122,5 @@
         } ?>
     </table>
 </main>
-<?php endif; ?>
+<?php
+endif; ?>

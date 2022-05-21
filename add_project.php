@@ -4,6 +4,10 @@ require_once 'helpers.php';
 require_once 'init.php';
 require_once 'session_init.php';
 
+$current_project_id = (int)filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_NUMBER_INT);
+$show_complete_tasks = (int)filter_input(INPUT_GET, 'show_completed', FILTER_SANITIZE_NUMBER_INT);
+$current_deadline = filter_input(INPUT_GET, 'deadline', FILTER_SANITIZE_SPECIAL_CHARS);
+
 if ($is_auth === 1) {
     $current_user_id = $_SESSION['user']['id'];
 } else {
@@ -25,8 +29,11 @@ if ($link) {
     require_once 'list_of_tasks.php';
 
     $content = include_template('form_project.php', [
-        'tasks' => $tasks,
-        'projects' => $projects
+        'projects' => $projects,
+        'tasks_for_counting' => $tasks,
+        'show_complete_tasks' => $show_complete_tasks,
+        'current_deadline' => $current_deadline,
+        'current_project_id' => $current_project_id
     ]);
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -41,6 +48,10 @@ if ($link) {
             if (!is_validate_length($value, MAXIMUM_LENGTH)) {
                 return 'Название должно быть не более 255 символов';
             }
+            $value = trim($value);
+            if (empty($value)) {
+                return 'Название проекта не может состоять из одних пробелов';
+            }
             return null;
         };
 
@@ -48,9 +59,12 @@ if ($link) {
         if ($errors($project_name) !== null) {
             $error_name = $errors($project_name);
             $content = include_template('form_project.php', [
-                'tasks' => $tasks,
                 'error' => $error_name,
-                'projects' => $projects
+                'projects' => $projects,
+                'show_complete_tasks' => $show_complete_tasks,
+                'current_deadline' => $current_deadline,
+                'tasks_for_counting' => $tasks,
+                'current_project_id' => $current_project_id
             ]);
         } else {
             $sql = 'INSERT INTO projects (name, user_id) VALUES (?, ?)';
@@ -67,7 +81,10 @@ if ($link) {
     } else {
         $content = include_template('form_project.php', [
             'projects' => $projects,
-            'tasks' => $tasks
+            'show_complete_tasks' => $show_complete_tasks,
+            'current_deadline' => $current_deadline,
+            'tasks_for_counting' => $tasks,
+            'current_project_id' => $current_project_id
         ]);
     }
 }

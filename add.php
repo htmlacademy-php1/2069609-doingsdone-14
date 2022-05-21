@@ -11,6 +11,10 @@ if ($is_auth === 1) {
     exit();
 }
 
+$current_project_id = (int)filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_NUMBER_INT);
+$show_complete_tasks = (int)filter_input(INPUT_GET, 'show_completed', FILTER_SANITIZE_NUMBER_INT);
+$current_deadline = filter_input(INPUT_GET, 'deadline', FILTER_SANITIZE_SPECIAL_CHARS);
+
 if ($link) {
     require_once 'list_of_projects.php';
     $projects_ids = [];
@@ -26,8 +30,11 @@ if ($link) {
     require_once 'list_of_tasks.php';
 
     $content = include_template('form_task.php', [
-        'tasks' => $tasks,
-        'projects' => $projects
+        'projects' => $projects,
+        'tasks_for_counting' => $tasks,
+        'show_complete_tasks' => $show_complete_tasks,
+        'current_deadline' => $current_deadline,
+        'current_project_id' => $current_project_id
     ]);
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -101,9 +108,12 @@ if ($link) {
 
         if (count($errors)) {
             $content = include_template('form_task.php', [
-                'tasks' => $tasks,
-                'errors' => $errors,
-                'projects' => $projects
+                'projects' => $projects,
+                'tasks_for_counting' => $tasks,
+                'show_complete_tasks' => $show_complete_tasks,
+                'current_deadline' => $current_deadline,
+                'current_project_id' => $current_project_id,
+                'errors' => $errors
             ]);
         } else {
             $sql = 'INSERT INTO tasks (date_of_create, name, link_to_file, due_date, user_id, project_id)' .
@@ -122,7 +132,10 @@ if ($link) {
     } else {
         $content = include_template('form_task.php', [
             'projects' => $projects,
-            'tasks' => $tasks
+            'tasks_for_counting' => $tasks,
+            'show_complete_tasks' => $show_complete_tasks,
+            'current_deadline' => $current_deadline,
+            'current_project_id' => $current_project_id
         ]);
     }
 }
