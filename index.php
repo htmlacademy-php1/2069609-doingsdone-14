@@ -36,6 +36,7 @@ $check_task_id = filter_input(INPUT_GET, 'task_id', FILTER_SANITIZE_NUMBER_INT);
 
 $error_no_tasks = '';
 $content_error_404 = '';
+$user_tasks = null;
 
 if (empty($current_deadline)) {
     $current_deadline = 'all';
@@ -87,7 +88,7 @@ if (array_key_exists('user', $_SESSION)) {
         if ($current_deadline === 'tomorrow') {
             $what_tasks_section_show = 'AND t.due_date = DATE_ADD(CURDATE(), INTERVAL 1 DAY)';
         }
-
+        //Находим задачи, которые нужно вывести
         $sql = 'SELECT t.name as task_name, p.name as project_name, p.id as project_id, ' .
             't.due_date as task_date, t.status as task_status, t.link_to_file as path , t.id as task_id ' .
             'FROM tasks as t ' .
@@ -101,36 +102,31 @@ if (array_key_exists('user', $_SESSION)) {
 
         if ($result) {
             $tasks = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
+            // Узнаем значение id текущего проекта, до применения фильтра FILTER_SANITIZE_NUMBER_INT
             $current_project_id_without_filter = filter_input(INPUT_GET, 'project_id');
+            // Находим значение $error_no_tasks с помощью функции what_is_error_no_tasks
+            $error_no_tasks = what_is_error_no_tasks(
+                $current_project_id,
+                $tasks,
+                $current_project_id_without_filter,
+                $user_tasks,
+                $user_project_ids
+            );
 
-            if ($current_project_id === 0 and count($tasks) === 0) {
-                $error_no_tasks = 'Нет задач';
-            }
-            if (!$current_project_id_without_filter and count($user_tasks) === 0) {
-                $error_no_tasks = 'Нет задач';
-            }
-            if ($current_project_id_without_filter) {
-                if (in_array($current_project_id, $user_project_ids)) {
-                    if (count_of_tasks($tasks, $current_project_id) === 0) {
-                        $error_no_tasks = 'Нет задач';
-                    }
-                } else {
-                    $error_404 = 'Вы обращаетесь к несуществующему проекту';
-                    http_response_code(404);
-                    $content_error_404 = include_template('error.php', ['error' => $error_404]);
-                }
+            if ($error_no_tasks === 'Вы обращаетесь к несуществующему проекту') {
+                http_response_code(404);
+                $content_error_404 = include_template('error.php', ['error' => $error_no_tasks]);
             }
 
             $content = include_template('main.php', [
                 'tasks' => $tasks,
+                'tasks_for_counting' => $user_tasks,
                 'projects' => $projects,
                 'show_complete_tasks' => $show_complete_tasks,
                 'current_project_id' => $current_project_id,
                 'tasks_section' => $tasks_section,
                 'current_deadline' => $current_deadline,
                 'error_no_tasks' => $error_no_tasks,
-                'tasks_for_counting' => $user_tasks,
                 'content_error_404' => $content_error_404
             ]);
         } else {
@@ -148,6 +144,7 @@ if (array_key_exists('user', $_SESSION)) {
     }
 
     if ($check_task_status !== null) {
+        // Чтобы не было возможности удалять статусами чужих задач, добавиляем условие AND user_id = ?
         $sql = 'UPDATE tasks SET status = not status WHERE id = ? AND user_id = ?';
         $stmt = db_get_prepare_stmt($link, $sql, [$check_task_id, $current_user_id]);
         $result = mysqli_stmt_execute($stmt);

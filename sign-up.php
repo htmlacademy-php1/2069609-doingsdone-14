@@ -26,6 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!is_validate_length($value, MAXIMUM_LENGTH)) {
                 return "Длина не более 255 символов";
             }
+            $value = trim($value);
+            if (empty($value)) {
+                return 'Имя не может состоять из одних пробелов';
+            }
             return null;
         }
     ];

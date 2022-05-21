@@ -35,7 +35,7 @@ if ($result) {
             $date_for_message = date("Y/m/d");
             $email = $user['email'];
             $name = $user['name'];
-            // Находим форму слов запланирована и задача для сообщения
+            // Находим форму слов 'запланирована' и 'задача' для сообщения
             $first_word = get_noun_plural_form($tasks_count, 'запланирована', 'запланированы', 'запланированы');
             $second_word = get_noun_plural_form($tasks_count, 'задача', 'задачи', 'задачи');
 

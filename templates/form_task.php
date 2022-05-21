@@ -1,22 +1,13 @@
-<section class="content__side">
-    <h2 class="content__side-heading">Проекты</h2>
+<?php
 
-    <nav class="main-navigation">
-        <ul class="main-navigation__list">
-            <?php
-            foreach ($projects as $project): ?>
-                <li class="main-navigation__list-item">
-                    <a class="main-navigation__list-item-link"
-                       href="index.php?project_id=<?= $project['id'] ?>"><?= $project['name'] ?></a>
-                    <span class="main-navigation__list-item-count"><?= count_of_tasks($tasks, $project['id']) ?></span>
-                </li>
-            <?php
-            endforeach; ?>
-        </ul>
-    </nav>
-
-    <a class="button button--transparent button--plus content__side-button" href="add_project.php">Добавить проект</a>
-</section>
+$projects_list = include_template('projects_list.php', [
+    'projects' => $projects,
+    'current_project_id' => $current_project_id,
+    'show_complete_tasks' => $show_complete_tasks,
+    'current_deadline' => $current_deadline,
+    'tasks_for_counting' => $tasks_for_counting
+]);
+print ($projects_list) ?>
 
 <main class="content__main">
     <h2 class="content__main-heading">Добавление задачи</h2>
@@ -48,7 +39,7 @@
                         if ($project['id'] === (int)filter_input(INPUT_POST, 'project_id')): ?>
                             selected
                         <?php
-                        endif; ?>><?= $project['name'] ?>
+                        endif; ?>><?= htmlspecialchars($project['name']) ?>
                     </option>
                 <?php
                 endforeach ?>
